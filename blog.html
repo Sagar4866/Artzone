@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Artzone | Blog & Stories</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary: #493922;
+      --secondary: #845c2e;
+      --accent: #a48450;
+      --background: #e9d7bd;
+      --card-bg: #f4e4c9;
+      --header-bg: #edd9b4;
+      --text: #493922;
+      --text-light: #846533;
+      --highlight: #ffecc7;
+    }
+    
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+    }
+    
+    /* Removed header/navigation bar styles */
+    
+    .btn {
+      background: var(--primary);
+      color: var(--highlight);
+      border-radius: 6px;
+      border: none;
+      padding: 6px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .3s, transform .2s;
+      box-shadow: 0 2px 8px rgba(73,61,34,0.05);
+    }
+    
+    .btn:hover, .btn:focus {
+      background: var(--secondary);
+      transform: scale(1.10);
+    }
+    
+    .profile {
+      font-size: 1rem;
+      padding: 2px 0;
+    }
+    
+    /* Hero */
+    .hero {
+      margin: 38px 0 0 0;
+      text-align: center;
+      padding: 0 20px;
+    }
+    
+    .hero .subtitle {
+      font-size: 1.10rem;
+      margin-top: 10px;
+      color: var(--text-light);
+    }
+    
+    .hero h1 {
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      font-size: 2.5rem;
+      margin: 0 0 10px 0;
+      color: var(--text);
+      letter-spacing: -1px;
+      animation: fadeUp 1.2s cubic-bezier(.31,.71,.64,.93);
+    }
+    
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    
+    /* Filter/Search */
+    .searchbar-section {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      max-width: 750px;
+      margin: 20px auto 0 auto;
+      padding: 0 20px;
+      animation: fadeUp 1.1s cubic-bezier(.31,.71,.64,.93);
+      flex-wrap: wrap;
+    }
+    
+    .search-input {
+      flex: 1;
+      min-width: 200px;
+      font-size: 1.11rem;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid #d2bb99;
+      background: #fbf5eb;
+      color: var(--text);
+      outline: none;
+    }
+    
+    .category-select {
+      padding: 8px 12px;
+      background: #ece2c7;
+      border: 1px solid #d8c4a6;
+      border-radius: 6px;
+      font-size: 1rem;
+      color: var(--text);
+      outline: none;
+      min-width: 150px;
+    }
+    
+    .article-count {
+      color: #937042;
+      font-weight: 500;
+      margin-left: 10px;
+    }
+    
+    /* Loading indicator */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      color: var(--text-light);
+    }
+    
+    .loading.active {
+      display: block;
+    }
+    
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* No results message */
+    .no-results {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+      font-style: italic;
+      grid-column: 1 / -1;
+    }
+    
+    .no-results.active {
+      display: block;
+    }
+    
+    /* Section Headings */
+    .section-title {
+      font-family: 'Georgia', serif;
+      font-size: 1.52rem;
+      font-weight: bold;
+      color: var(--text);
+      margin: 30px 0 20px 42px;
+      letter-spacing: -.5px;
+      animation: fadeUp .9s cubic-bezier(.31,.71,.64,.93);
+    }
+    
+    /* Cards container */
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 32px;
+      margin: 0 42px 38px 42px;
+      min-height: 320px;
+    }
+    
+    /* Blog Card */
+    .blog-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0px 2px 10px rgba(79, 46, 16, 0.07);
+      overflow: hidden;
+      transition: transform .28s cubic-bezier(.28,.6,.49,.92), box-shadow .28s;
+      animation: fadeUp .9s cubic-bezier(.31,.71,.64,.93);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .blog-card:hover {
+      transform: translateY(-8px) scale(1.025);
+      box-shadow: 0px 8px 26px rgba(79, 46, 16, 0.17);
+    }
+    
+    .blog-img {
+      width: 100%;
+      aspect-ratio: 2/1;
+      object-fit: cover;
+      display: block;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+    }
+    
+    .blog-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: var(--accent);
+      color: #fff3d6;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+      opacity: 0.92;
+      box-shadow: 0 2px 6px rgba(73,61,34,0.05);
+      z-index: 1;
+      animation: fadeTag 2s ease;
+    }
+    
+    @keyframes fadeTag {
+      from { opacity: 0; transform: translateY(-10px);}
+      to { opacity: .92; transform: translateY(0);}
+    }
+    
+    .blog-content {
+      padding: 19px 18px 18px 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .blog-meta {
+      font-size: 0.96rem;
+      color: #937042;
+      margin-bottom: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      animation: fadeUp .6s cubic-bezier(.31,.71,.64,.93);
+    }
+    
+    .blog-meta span,
+    .blog-meta .meta-label {
+      background: #eed7b0;
+      border-radius: 5px;
+      padding: 2px 8px;
+      font-size: 0.86rem;
+      color: #7b633f;
+      margin-right: 2px;
+      font-weight: 500;
+    }
+    
+    .blog-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-family: 'Georgia', serif;
+      letter-spacing: -.5px;
+      animation: fadeUp .7s cubic-bezier(.31,.71,.64,.93);
+    }
+    
+    .blog-desc {
+      font-size: 1.02rem;
+      margin-bottom: 8px;
+      color: #614a2b;
+      flex: 1;
+      line-height: 1.53;
+    }
+    
+    .blog-author {
+      font-size: 0.96rem;
+      color: #937042;
+      margin-bottom: 3px;
+      font-style: italic;
+    }
+    
+    .read-btn {
+      display: inline-block;
+      margin-top: 8px;
+      align-self: flex-start;
+      background: var(--primary);
+      color: #ffeec2;
+      padding: 6px 18px;
+      border-radius: 6px;
+      font-size: 1rem;
+      border: none;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(73,61,34,0.05);
+      cursor: pointer;
+      transition: background .3s, transform .2s;
+      animation: atrBtn .9s;
+    }
+    
+    @keyframes atrBtn {
+      from { opacity: 0; transform: translateY(15px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    
+    .read-btn:hover {
+      background: var(--accent);
+      color: #fff3d6;
+      transform: scale(1.09);
+    }
+    
+    /* Subscribe section */
+    .subscribe-section {
+      padding: 74px 20px 23px 20px;
+      text-align: center;
+      margin-top: 12px;
+      background: #ecd3af;
+      animation: fadeUp 1.2s cubic-bezier(.31,.71,.64,.93);
+    }
+    
+    .subscribe-section h2 {
+      font-family: 'Georgia', serif;
+      font-size: 2.12rem;
+      color: var(--text);
+      margin-bottom: 14px;
+      font-weight: bold;
+    }
+    
+    .subscribe-section p {
+      font-size: 1.17rem;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+    
+    .subscribe-bar {
+      margin-bottom: 15px;
+    }
+    
+    .subscribe-input {
+      font-size: 1.12rem;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid #d8c4a6;
+      background: #fbf5eb;
+      color: var(--text);
+      width: 270px;
+      margin-right: 6px;
+      outline: none;
+    }
+    
+    /* Footer */
+    .footer {
+      background: #ecd3af;
+      color: var(--text);
+      padding: 50px 30px 24px 30px;
+      font-size: 1rem;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #d8c4a6;
+      padding-bottom: 22px;
+    }
+    
+    .footer h3 {
+      font-family: 'Georgia', serif;
+      font-size: 1.11rem;
+      color: var(--text);
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    
+    .footer ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .footer ul li {
+      margin-bottom: 9px;
+    }
+    
+    .footer-connect {
+      margin-top: 15px;
+    }
+    
+    .footer-bottom {
+      text-align: left;
+      font-size: 0.97rem;
+      color: #8d6e51;
+      margin-top: 13px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .cards-row {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .footer, .section-title, .cards-row {
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .subscribe-section h2 {
+        font-size: 1.38rem;
+      }
+      
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .cards-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .searchbar-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-input, .category-select {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      
+      .article-count {
+        margin-left: 0;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div style="font-size:1.09rem;color:#8d6e51;">&#128214; BLOG & STORIES</div>
+    <h1>Sustainable Art Stories</h1>
+    <div class="subtitle">Discover inspiring stories, artist interviews, and insights into the world of eco-conscious art</div>
+  </section>
+  
+  <!-- FILTER BAR -->
+  <div class="searchbar-section">
+    <input type="search" id="blog-search" class="search-input" placeholder="Search blog posts, authors, or topics...">
+    <select id="category-filter" class="category-select">
+      <option value="all">All Categories</option>
+      <option value="events">Events</option>
+      <option value="community">Community News</option>
+      <option value="philosophy">Philosophy of Art</option>
+      <option value="techniques">Techniques</option>
+    </select>
+    <span id="article-count" class="article-count">&#128196; 6 articles</span>
+  </div>
+  
+  <!-- LOADING INDICATOR -->
+  <div class="loading" id="loading-indicator">
+    <div class="spinner"></div>
+    <p>Finding articles...</p>
+  </div>
+  
+  <!-- FEATURED STORIES -->
+  <div class="section-title">Featured Stories</div>
+  <div class="cards-row" id="featured-stories">
+    <!-- Card 1 -->
+    <div class="blog-card" data-categories="events" data-title="Upcoming Workshops: Learn to Create Your Own Eco-Art" data-author="Artzone Events" data-content="Excited to get your hands dirty? Artzone is launching a series of online and in-person workshops designed to teach you the fundamentals of eco-art. From paper-making with recycled materials to creatin...">
+      <img src="https://images.unsplash.com/photo-eco-workshop" alt="Eco Art Workshop" class="blog-img">
+      <span class="blog-tag">Featured</span>
+      <div class="blog-content">
+        <div class="blog-meta">
+          <span>Aug 10, 2024</span>
+          <span class="meta-label">Artzone Events</span>
+          <span class="meta-label">Events</span>
+        </div>
+        <div class="blog-title">Upcoming Workshops: Learn to Create Your Own Eco-Art</div>
+        <div class="blog-desc">
+          Excited to get your hands dirty? Artzone is launching a series of online and in-person workshops designed to teach you the fundamentals of eco-art. From paper-making with recycled materials to creatin...
+        </div>
+        <button class="read-btn">Read More &rarr;</button>
+      </div>
+    </div>
+    
+    <!-- Card 2 -->
+    <div class="blog-card" data-categories="community" data-title="Community Showcase: Artzone's First Virtual Exhibition Success" data-author="Sarah Chen" data-content="Our inaugural virtual exhibition, 'Reclaimed Beauty,' was a resounding success! We highlight some of the most inspiring pieces submitted by our community members, showcasing the incredible diversity a...">
+      <img src="https://images.unsplash.com/photo-reclaimed-beauty" alt="Reclaimed Beauty Exhibit" class="blog-img">
+      <span class="blog-tag">Featured</span>
+      <div class="blog-content">
+        <div class="blog-meta">
+          <span>Aug 01, 2024</span>
+          <span class="meta-label">Sarah Chen</span>
+          <span class="meta-label">Community News</span>
+        </div>
+        <div class="blog-title">Community Showcase: Artzone's First Virtual Exhibition Success</div>
+        <div class="blog-desc">
+          Our inaugural virtual exhibition, 'Reclaimed Beauty,' was a resounding success! We highlight some of the most inspiring pieces submitted by our community members, showcasing the incredible diversity a...
+        </div>
+        <button class="read-btn">Read More &rarr;</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- LATEST ARTICLES -->
+  <div class="section-title">Latest Articles</div>
+  <div class="cards-row" id="latest-articles">
+    <!-- Card 3 -->
+    <div class="blog-card" data-categories="philosophy" data-title="The Art of Deconstruction: Finding Beauty in Brokenness" data-author="David Lee" data-content="This article delves into the philosophy behind deconstruction in art, where artists intentionally break down and reassem...">
+      <img src="https://images.unsplash.com/photo-broken-vase" alt="Broken Vase Art" class="blog-img">
+      <div class="blog-content">
+        <div class="blog-meta">
+          <span>Aug 05</span>
+          <span class="meta-label">Philosophy of Art</span>
+        </div>
+        <div class="blog-title">The Art of Deconstruction: Finding Beauty in Brokenness</div>
+        <div class="blog-desc">
+          This article delves into the philosophy behind deconstruction in art, where artists intentionally break down and reassem...
+        </div>
+        <div class="blog-author">&#9997; By David Lee</div>
+        <button class="read-btn">Read More &rarr;</button>
+      </div>
+    </div>
+    
+    <!-- Card 4 -->
+    <div class="blog-card" data-categories="techniques" data-title="Beyond the Canvas: Innovative Materials in Contemporary Art" data-author="Liam O'Connell" data-content="Explore the exciting world of artists who are pushing boundaries by incorporating unconventional materials into their wo...">
+      <img src="https://images.unsplash.com/photo-art-materials" alt="Innovative Materials" class="blog-img">
+      <div class="blog-content">
+        <div class="blog-meta">
+          <span>Jul 25</span>
+          <span class="meta-label">Techniques</span>
+        </div>
+        <div class="blog-title">Beyond the Canvas: Innovative Materials in Contemporary Art</div>
+        <div class="blog-desc">
+          Explore the exciting world of artists who are pushing boundaries by incorporating unconventional materials into their wo...
+        </div>
+        <div class="blog-author">&#9997; By Liam O'Connell</div>
+        <button class="read-btn">Read More &rarr;</button>
+      </div>
+    </div>
+    
+    <!-- Additional sample articles for filtering demonstration -->
+    <div class="blog-card" data-categories="events" data-title="Annual Eco-Art Festival Returns This Fall" data-author="Maria Rodriguez" data-content="Mark your calendars! Our popular annual Eco-Art Festival is returning this October with more artists, workshops, and installations than ever before. This year's theme is 'Renewal'...">
+      <img src="https://images.unsplash.com/photo-festival" alt="Eco Art Festival" class="blog-img">
+      <div class="blog-content">
+        <div class="blog-meta">
+          <span>Jul 18</span>
+          <span class="meta-label">Events</span>
+        </div>
+        <div class="blog-title">Annual Eco-Art Festival Returns This Fall</div>
+        <div class="blog-desc">
+          Mark your calendars! Our popular annual Eco-Art Festival is returning this October with more artists, workshops, and installations than ever before...
+        </div>
+        <div class="blog-author">&#9997; By Maria Rodriguez</div>
+        <button class="read-btn">Read More &rarr;</button>
+      </div>
+    </div>
+    
+    <div class="blog-card" data-categories="community" data-title="Spotlight: Local Artists Transforming Ocean Plastic" data-author="Jamal Wilson" data-content="In this community feature, we interview three artists who are creating stunning works from plastic waste collected from beaches and oceans. Their work not only beautifies but also raises awareness...">
+      <img src="https://images.unsplash.com/photo-ocean-plastic" alt="Ocean Plastic Art" class="blog-img">
+      <div class="blog-content">
+        <div class="blog-meta">
+          <span>Jul 10</span>
+          <span class="meta-label">Community News</span>
+        </div>
+        <div class="blog-title">Spotlight: Local Artists Transforming Ocean Plastic</div>
+        <div class="blog-desc">
+          In this community feature, we interview three artists who are creating stunning works from plastic waste collected from beaches and oceans...
+        </div>
+        <div class="blog-author">&#9997; By Jamal Wilson</div>
+        <button class="read-btn">Read More &rarr;</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- NO RESULTS MESSAGE -->
+  <div class="no-results" id="no-results">
+    <h3>No articles found</h3>
+    <p>Try adjusting your search or filter criteria</p>
+  </div>
+  
+  <!-- SUBSCRIBE SECTION -->
+  <div class="subscribe-section">
+    <h2>Stay Inspired</h2>
+    <p>Get the latest stories about sustainable art, artist spotlights, and eco-conscious creativity delivered to your inbox</p>
+    <div class="subscribe-bar">
+      <input type="email" class="subscribe-input" placeholder="Enter your email">
+      <button class="btn subscribe-btn">Subscribe</button>
+    </div>
+  </div>
+  
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h3>Artzone</h3>
+        <p>Transforming waste into wonder. Connect with eco-conscious artists who create beautiful art from discarded materials.</p>
+        <div class="footer-connect">&#9855; Eco-Friendly Art Platform</div>
+      </div>
+      <div>
+        <h3>Explore</h3>
+        <ul>
+          <li>Art Gallery</li>
+          <li>Featured Artists</li>
+          <li>Waste to Art</li>
+          <li>Blog & Stories</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Community</h3>
+        <ul>
+          <li>Events & Workshops</li>
+          <li>Join as Artist</li>
+          <li>&#128101; Growing Community</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li>&#9993; hello@artzone.eco</li>
+          <li>&#10084; Made with love for our planet</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2025 Artzone. Transforming waste into art, one creation at a time.
+    </div>
+  </footer>
+  
+  <script>
+    // Initialize blog data
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get all blog cards
+      const blogCards = document.querySelectorAll('.blog-card');
+      const totalArticles = blogCards.length;
+      document.getElementById('article-count').textContent = `📄 ${totalArticles} articles`;
+      
+      // Set up search functionality
+      const searchInput = document.getElementById('blog-search');
+      const categoryFilter = document.getElementById('category-filter');
+      const loadingIndicator = document.getElementById('loading-indicator');
+      const noResultsMessage = document.getElementById('no-results');
+      
+      // Add event listeners for filtering
+      searchInput.addEventListener('input', filterArticles);
+      categoryFilter.addEventListener('change', filterArticles);
+      
+      // Filter articles based on search and category
+      function filterArticles() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const category = categoryFilter.value;
+        
+        // Show loading indicator
+        loadingIndicator.classList.add('active');
+        
+        // Use setTimeout to allow the UI to update before the filtering operation
+        setTimeout(() => {
+          let visibleCount = 0;
+          
+          blogCards.forEach(card => {
+            const title = card.getAttribute('data-title').toLowerCase();
+            const content = card.getAttribute('data-content').toLowerCase();
+            const author = card.getAttribute('data-author').toLowerCase();
+            const categories = card.getAttribute('data-categories');
+            
+            const matchesSearch = searchTerm === '' || 
+                                title.includes(searchTerm) || 
+                                content.includes(searchTerm) || 
+                                author.includes(searchTerm);
+            
+            const matchesCategory = category === 'all' || categories.includes(category);
+            
+            if (matchesSearch && matchesCategory) {
+              card.style.display = 'flex';
+              visibleCount++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          
+          // Update article count
+          document.getElementById('article-count').textContent = `📄 ${visibleCount} articles`;
+          
+          // Show/hide no results message
+          if (visibleCount === 0) {
+            noResultsMessage.classList.add('active');
+          } else {
+            noResultsMessage.classList.remove('active');
+          }
+          
+          // Hide loading indicator
+          loadingIndicator.classList.remove('active');
+        }, 300); // Short delay to show loading indicator
+      }
+      
+      // Simple animation for hero, cards, and section titles
+      document.querySelectorAll('.section-title, .blog-card, .hero h1').forEach(el => {
+        el.style.opacity = 0;
+        setTimeout(() => {
+          el.style.transition = "opacity .7s, transform .8s";
+          el.style.opacity = 1;
+          el.style.transform = "translateY(0)";
+        }, 350);
+      });
+      
+      // Button click animation
+      document.querySelectorAll('.read-btn, .btn.subscribe-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          btn.style.transform = "scale(0.98)";
+          setTimeout(() => btn.style.transform = "scale(1)", 210);
+        });
+      });
+      
+      // Subscribe form handling
+      const subscribeBtn = document.querySelector('.subscribe-btn');
+      const subscribeInput = document.querySelector('.subscribe-input');
+      
+      subscribeBtn.addEventListener('click', function() {
+        if (subscribeInput.value && subscribeInput.value.includes('@')) {
+          alert('Thanks for subscribing! You\'ll hear from us soon.');
+          subscribeInput.value = '';
+        } else {
+          alert('Please enter a valid email address.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

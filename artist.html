@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Artzone - Meet Our Artists</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+:root {
+    --primary-bg: #e4ceab;
+    --card-bg: #f7ead3;
+    --text-dark: #473816;
+    --accent: #4f391b;
+    --secondary: #b47a2c;
+    --font-main: 'Open Sans', sans-serif;
+    --font-title: 'Merriweather', serif;
+    --transition-fast: 0.22s;
+    --success: #4caf50;
+    --loading-bg: rgba(255, 255, 255, 0.9);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--primary-bg);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* Header and Navigation */
+.header {
+    background: #f6e6cc;
+    border-bottom: 1px solid #e4ceab;
+    padding: 0.75em 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 1em;
+}
+
+.logo {
+    font-family: var(--font-title);
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.main-nav {
+    display: flex;
+    list-style: none;
+}
+
+.main-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    margin: 0 0.85em;
+    font-weight: 600;
+    font-size: 1.08em;
+    transition: color var(--transition-fast) ease;
+    position: relative;
+}
+
+.main-nav a:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--secondary);
+    transition: width 0.3s;
+}
+
+.main-nav a:hover:after { 
+    width: 100%;
+}
+
+.search-join {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+}
+
+.search-box {
+    padding: 0.6em 1em;
+    border-radius: 6px;
+    border: 1px solid #d6b884;
+    outline: none;
+    width: 200px;
+    transition: box-shadow var(--transition-fast);
+    font-family: var(--font-main);
+}
+
+.search-box:focus {
+    box-shadow: 0 0 2px 2px #c8ab7c6f;
+}
+
+.btn {
+    font-family: var(--font-main);
+    font-weight: 600;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 0.6em 1.4em;
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: #7c5c2b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.join-btn, .sign-in-btn {
+    background: #fff;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    transition: all 0.3s;
+}
+
+.join-btn:hover, .sign-in-btn:hover {
+    background: var(--accent);
+    color: #fff;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--accent);
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 3em 1em 2em 1em;
+    background: linear-gradient(rgba(244, 230, 204, 0.8), rgba(244, 230, 204, 0.8)), url('https://images.unsplash.com/photo-1515168833906-d2a3b82b3029?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-title {
+    font-family: var(--font-title);
+    font-size: 3em;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5em;
+    opacity: 0;
+    animation: fadeInUp 1s forwards;
+}
+
+.hero-sub {
+    font-size: 1.3em;
+    color: var(--accent);
+    margin-bottom: 1.65em;
+    opacity: 0;
+    animation: fadeInUp 1s 0.3s forwards;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.filters-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.32em;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.1em;
+    max-width: 900px;
+    margin: 2em auto 1.1em auto;
+    box-shadow: 0 2px 8px #d7be9957;
+    flex-wrap: wrap;
+}
+
+.filter-search {
+    border: 1px solid #ceba97;
+    border-radius: 6px;
+    padding: 0.6em 1em;
+    width: 250px;
+    font-size: 1em;
+    font-family: var(--font-main);
+}
+
+.filter-select {
+    border: 1px solid #ceba97;
+    border-radius: 6px;
+    padding: 0.6em 1em;
+    font-size: 1em;
+    font-family: var(--font-main);
+    background: white;
+    cursor: pointer;
+}
+
+.count {
+    font-size: 1.12em;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+/* Multi-select filter styles */
+.multi-select-container {
+    position: relative;
+    width: 200px;
+}
+
+.multi-select-button {
+    width: 100%;
+    text-align: left;
+    padding: 0.6em 1em;
+    border: 1px solid #ceba97;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    font-family: var(--font-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.multi-select-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ceba97;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.multi-select-options.active {
+    display: block;
+}
+
+.multi-select-option {
+    padding: 0.5em 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.multi-select-option:hover {
+    background: #f0f0f0;
+}
+
+.multi-select-option input {
+    margin-right: 8px;
+}
+
+/* Loading animation */
+.loading {
+    display: none;
+    text-align: center;
+    padding: 2em;
+}
+
+.loading.active {
+    display: block;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid var(--secondary);
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1em;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* No results message */
+.no-results {
+    display: none;
+    text-align: center;
+    padding: 3em;
+    grid-column: 1 / -1;
+}
+
+.no-results.active {
+    display: block;
+}
+
+/* Artists Gallery */
+.artists-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2em;
+    max-width: 1320px;
+    margin: 2em auto;
+    padding: 0 1.2em;
+}
+
+.artist-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 2em 1.4em 1.4em 1.4em;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    text-align: center;
+    border: 1px solid #e4ceab;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.artist-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.artist-card:hover {
+    box-shadow: 0 8px 26px #bea26663;
+    transform: translateY(-5px);
+}
+
+.artist-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 1em;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    object-fit: cover;
+    border: 3px solid var(--secondary);
+}
+
+.artist-card:hover .artist-image {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.artist-name {
+    font-family: var(--font-title);
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0.5em 0 0.5em 0;
+}
+
+.artist-desc {
+    color: var(--text-dark);
+    font-size: 1.1em;
+    margin-bottom: 1em;
+    min-height: 60px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    justify-content: center;
+    margin: 0.7em 0 1.2em 0;
+}
+
+.tag {
+    background: #e4ceab;
+    padding: 0.3em 0.8em;
+    border-radius: 15px;
+    font-size: 0.9em;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.artist-stats {
+    display: flex;
+    gap: 1.2em;
+    justify-content: center;
+    font-size: 1.05em;
+    margin-bottom: 1.2em;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.profile-btn {
+    background: var(--accent);
+    color: #fff;
+    width: 100%;
+    margin: 0 auto 0.8em auto;
+    padding: 0.8em;
+    transition: all 0.3s;
+}
+
+.profile-btn:hover {
+    background: #7c5c2b;
+    transform: translateY(-2px);
+}
+
+.action-btns {
+    display: flex;
+    gap: 0.7em;
+    justify-content: center;
+    margin-bottom: 0.5em;
+    width: 100%;
+}
+
+.contact-btn, .website-btn {
+    background: #fff;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    width: 48%;
+    font-size: 0.98em;
+    padding: 0.6em;
+    transition: all 0.3s;
+}
+
+.contact-btn:hover, .website-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 2em 0;
+    gap: 0.5em;
+}
+
+.pagination-btn {
+    padding: 0.5em 1em;
+    border: 1px solid #ceba97;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-btn:hover {
+    background: #f0f0f0;
+}
+
+.pagination-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+/* Success toast notification */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--success);
+    color: white;
+    padding: 1em 2em;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* CTA Section */
+.cta-artist {
+    text-align: center;
+    background: var(--card-bg);
+    padding: 3em 1em;
+    margin: 3em 0 0 0;
+    border-top: 1px solid #e4ceab;
+}
+
+.cta-artist h2 {
+    font-family: var(--font-title);
+    font-size: 2.2em;
+    margin-bottom: 0.5em;
+    color: var(--accent);
+}
+
+.cta-artist p {
+    color: var(--text-dark);
+    font-size: 1.2em;
+    margin-bottom: 1.5em;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Footer */
+.footer {
+    background: #e4ceab;
+    padding: 3em 1em 1.5em 1em;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2em;
+    max-width: 1300px;
+    margin: 0 auto;
+    color: var(--text-dark);
+}
+
+.footer-col h3 {
+    font-family: var(--font-title);
+    color: var(--accent);
+    margin-bottom: 1em;
+    font-size: 1.3em;
+}
+
+.footer-col p {
+    margin-bottom: 0.7em;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-icons a {
+    color: var(--accent);
+    font-size: 1.5rem;
+    transition: all 0.3s;
+}
+
+.social-icons a:hover {
+    color: var(--secondary);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2em;
+    color: #7c5c2b;
+    font-size: 1.02em;
+    margin-top: 2em;
+    border-top: 1px solid #d6b884;
+}
+
+/* Artist Modal */
+.artist-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.artist-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 2em;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--accent);
+    cursor: pointer;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5em;
+}
+
+.modal-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1.5em;
+    border: 3px solid var(--secondary);
+}
+
+.modal-name {
+    font-family: var(--font-title);
+    font-size: 1.8em;
+    color: var(--accent);
+    margin-bottom: 0.3em;
+}
+
+.modal-stats {
+    display: flex;
+    gap: 1.5em;
+    margin-bottom: 1em;
+}
+
+.modal-bio {
+    margin-bottom: 1.5em;
+    line-height: 1.6;
+}
+
+.modal-artworks {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+    margin-top: 1.5em;
+}
+
+.artwork-thumb {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.artwork-thumb:hover {
+    transform: scale(1.05);
+}
+
+/* Lightbox for artwork images */
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 1100;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.lightbox.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 950px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1em;
+    }
+    
+    .main-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .artists-gallery {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    
+    .filters-bar {
+        flex-direction: column;
+        gap: 1em;
+    }
+    
+    .filter-search, .filter-select, .multi-select-container {
+        width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    .artists-gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .modal-image {
+        margin-right: 0;
+        margin-bottom: 1em;
+    }
+    
+    .modal-artworks {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    .main-nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #f6e6cc;
+        padding: 1em;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .main-nav.active {
+        display: flex;
+    }
+    
+    .main-nav a {
+        margin: 0.5em 0;
+    }
+    
+    .search-join {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2.2em;
+    }
+    
+    .hero-sub {
+        font-size: 1.1em;
+    }
+    
+    .artist-name {
+        font-size: 1.3em;
+    }
+    
+    .modal-artworks {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-stats {
+        flex-direction: column;
+        gap: 0.5em;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Header and Navigation -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">Artzone</div>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="main-nav">
+                <a href="#">Discover</a>
+                <a href="#">Gallery</a>
+                <a href="#">Artists</a>
+                <a href="#">Waste to Art</a>
+                <a href="#">Blog</a>
+                <a href="#">Events</a>
+            </nav>
+            <div class="search-join">
+                <input type="text" placeholder="Search artists..." class="search-box" aria-label="Search artists">
+                <button class="btn join-btn">Join as Artist</button>
+                <button class="btn sign-in-btn">Sign In</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-title">Meet Our Artists</h1>
+        <p class="hero-sub">Connect with talented creators who transform waste into beautiful, sustainable art</p>
+        <div class="filters-bar">
+            <input type="text" placeholder="Search artists by name, bio, or specialties..." class="filter-search" id="artistSearch">
+            
+            <div class="multi-select-container">
+                <button class="multi-select-button" id="specialtiesButton">
+                    <span>Specialties</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="multi-select-options" id="specialtiesOptions">
+                    <label class="multi-select-option">
+                        <input type="checkbox" value="plastic"> Recycled Plastic
+                    </label>
+                    <label class="multi-select-option">
+                        <input type="checkbox" value="textile"> Textile Upcycling
+                    </label>
+                    <label class="multi-select-option">
+                        <input type="checkbox" value="metal"> Metal Sculpture
+                    </label>
+                    <label class="multi-select-option">
+                        <input type="checkbox" value="paper"> Paper Art
+                    </label>
+                    <label class="multi-select-option">
+                        <input type="checkbox" value="ewaste"> E-Waste Art
+                    </label>
+                    <label class="multi-select-option">
+                        <input type="checkbox" value="organic"> Organic Materials
+                    </label>
+                </div>
+            </div>
+            
+            <select class="filter-select" id="sortFilter">
+                <option value="name">Name (A-Z)</option>
+                <option value="rating">Highest Rating</option>
+                <option value="followers">Most Followers</option>
+            </select>
+            <span class="count"><span id="artistCount">6</span> artists</span>
+        </div>
+    </section>
+
+    <!-- Artists Gallery -->
+    <main>
+        <div class="loading" id="loadingIndicator">
+            <div class="loading-spinner"></div>
+            <p>Finding artists...</p>
+        </div>
+        
+        <div class="artists-gallery" id="artistsContainer">
+            <!-- Artist Card 1 -->
+            <div class="artist-card" data-specialty="plastic" data-rating="4.9" data-followers="12500">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Anya Sharma" class="artist-image">
+                <h2 class="artist-name">Anya Sharma</h2>
+                <p class="artist-desc">Transforms discarded plastic into vibrant, intricate sculptures, highlighting the beauty in waste and promoting environmental awareness.</p>
+                <div class="tags">
+                    <span class="tag">Recycled plastic sculptures</span>
+                    <span class="tag">Upcycled household items</span>
+                    <span class="tag">Plastic bottle art</span>
+                </div>
+                <div class="artist-stats">
+                    <span>⭐ 4.9 Rating</span>
+                    <span>👥 12500 Followers</span>
+                </div>
+                <button class="btn profile-btn" data-artist="anya">View Profile</button>
+                <div class="action-btns">
+                    <button class="btn contact-btn">Contact</button>
+                    <button class="btn website-btn">Website</button>
+                </div>
+            </div>
+            
+            <!-- Artist Card 2 -->
+            <div class="artist-card" data-specialty="textile" data-rating="4.7" data-followers="8700">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ben Carter" class="artist-image">
+                <h2 class="artist-name">Ben Carter</h2>
+                <p class="artist-desc">Creates stunning tapestries and wearable art from textile scraps and discarded fabrics, advocating for sustainable fashion.</p>
+                <div class="tags">
+                    <span class="tag">Textile upcycling</span>
+                    <span class="tag">Fabric collage</span>
+                    <span class="tag">Woven art</span>
+                </div>
+                <div class="artist-stats">
+                    <span>⭐ 4.7 Rating</span>
+                    <span>👥 8700 Followers</span>
+                </div>
+                <button class="btn profile-btn" data-artist="ben">View Profile</button>
+                <div class="action-btns">
+                    <button class="btn contact-btn">Contact</button>
+                    <button class="btn website-btn">Website</button>
+                </div>
+            </div>
+            
+            <!-- Artist Card 3 -->
+            <div class="artist-card" data-specialty="metal" data-rating="4.8" data-followers="15300">
+                <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Clara Rodriguez" class="artist-image">
+                <h2 class="artist-name">Clara Rodriguez</h2>
+                <p class="artist-desc">Specializes in large-scale installations using reclaimed metal and industrial waste, giving new life to discarded materials.</p>
+                <div class="tags">
+                    <span class="tag">Metal sculpture</span>
+                    <span class="tag">Industrial waste art</span>
+                    <span class="tag">Found object assemblage</span>
+                </div>
+                <div class="artist-stats">
+                    <span>⭐ 4.8 Rating</span>
+                    <span>👥 15300 Followers</span>
+                </div>
+                <button class="btn profile-btn" data-artist="clara">View Profile</button>
+                <div class="action-btns">
+                    <button class="btn contact-btn">Contact</button>
+                    <button class="btn website-btn">Website</button>
+                </div>
+            </div>
+            
+            <!-- Artist Card 4 -->
+            <div class="artist-card" data-specialty="paper" data-rating="4.6" data-followers="6200">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="David Lee" class="artist-image">
+                <h2 class="artist-name">David Lee</h2>
+                <p class="artist-desc">Crafts delicate paper sculptures and collages from recycled paper, magazines, and cardboard, showcasing the versatility of paper.</p>
+                <div class="tags">
+                    <span class="tag">Paper art</span>
+                    <span class="tag">Cardboard sculpture</span>
+                    <span class="tag">Recycled paper collage</span>
+                </div>
+                <div class="artist-stats">
+                    <span>⭐ 4.6 Rating</span>
+                    <span>👥 6200 Followers</span>
+                </div>
+                <button class="btn profile-btn" data-artist="david">View Profile</button>
+                <div class="action-btns">
+                    <button class="btn contact-btn">Contact</button>
+                    <button class="btn website-btn">Website</button>
+                </div>
+            </div>
+            
+            <!-- Artist Card 5 -->
+            <div class="artist-card" data-specialty="ewaste" data-rating="4.9" data-followers="10100">
+                <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Emily Chen" class="artist-image">
+                <h2 class="artist-name">Emily Chen</h2>
+                <p class="artist-desc">Repurposes e-waste components into futuristic and thought-provoking art pieces, highlighting technology's environmental impact.</p>
+                <div class="tags">
+                    <span class="tag">E-waste art</span>
+                    <span class="tag">Circuit board mosaics</span>
+                    <span class="tag">Recycled electronics</span>
+                </div>
+                <div class="artist-stats">
+                    <span>⭐ 4.9 Rating</span>
+                    <span>👥 10100 Followers</span>
+                </div>
+                <button class="btn profile-btn" data-artist="emily">View Profile</button>
+                <div class="action-btns">
+                    <button class="btn contact-btn">Contact</button>
+                    <button class="btn website-btn">Website</button>
+                </div>
+            </div>
+            
+            <!-- Artist Card 6 -->
+            <div class="artist-card" data-specialty="organic" data-rating="4.5" data-followers="4500">
+                <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db1604?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Frank Green" class="artist-image">
+                <h2 class="artist-name">Frank Green</h2>
+                <p class="artist-desc">Focuses on ephemeral art using organic waste like dried leaves, seeds, and food scraps, exploring nature's transient beauty.</p>
+                <div class="tags">
+                    <span class="tag">Organic waste art</span>
+                    <span class="tag">Natural material sculpture</span>
+                    <span class="tag">Ephemeral installations</span>
+                </div>
+                <div class="artist-stats">
+                    <span>⭐ 4.5 Rating</span>
+                    <span>👥 4500 Followers</span>
+                </div>
+                <button class="btn profile-btn" data-artist="frank">View Profile</button>
+                <div class="action-btns">
+                    <button class="btn contact-btn">Contact</button>
+                    <button class="btn website-btn">Website</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="no-results" id="noResults">
+            <i class="fas fa-search" style="font-size: 3em; margin-bottom: 0.5em;"></i>
+            <h3>No artists found</h3>
+            <p>Try adjusting your search or filter criteria</p>
+        </div>
+        
+        <div class="pagination" id="pagination">
+            <!-- Pagination will be generated by JavaScript -->
+        </div>
+    </main>
+    
+    <!-- Call to Action -->
+    <section class="cta-artist">
+        <h2>Are You an Eco Artist?</h2>
+        <p>Join our community of sustainable artists and showcase your waste-to-art creations to the world</p>
+        <button class="btn join-btn" id="ctaJoinBtn">Join as Artist</button>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Artzone</h3>
+                <p>Transforming waste into wonder. Connect with eco-conscious artists who create beautiful art from discarded materials.</p>
+                <p>♻️ Eco-Friendly Art Platform</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <p>Art Gallery</p>
+                <p>Featured Artists</p>
+                <p>Waste to Art</p>
+                <p>Blog & Stories</p>
+            </div>
+            <div class="footer-col">
+                <h3>Community</h3>
+                <p>Events & Workshops</p>
+                <p>Join as Artist</p>
+                <p>👥 Growing Community</p>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <p>📧 hello@artzone.eco</p>
+                <p>❤️ Made with love for our planet</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 Artzone. Transforming waste into art, one creation at a time.
+        </div>
+    </footer>
+    
+    <!-- Artist Modal -->
+    <div class="artist-modal" id="artistModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+            <div class="modal-header">
+                <img src="" alt="" class="modal-image" id="modalImage">
+                <div>
+                    <h2 class="modal-name" id="modalName"></h2>
+                    <div class="modal-stats" id="modalStats"></div>
+                </div>
+            </div>
+            <div class="modal-bio" id="modalBio"></div>
+            <h3>Artist Specialties</h3>
+            <div class="tags" id="modalTags"></div>
+            <h3>Featured Artworks</h3>
+            <div class="modal-artworks" id="modalArtworks"></div>
+        </div>
+    </div>
+    
+    <!-- Lightbox for artwork images -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+        <img src="" alt="" class="lightbox-content" id="lightboxImage">
+    </div>
+    
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const mainNav = document.querySelector('.main-nav');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                    this.querySelector('i').classList.toggle('fa-bars');
+                    this.querySelector('i').classList.toggle('fa-times');
+                });
+            }
+            
+            // Multi-select filter functionality
+            const specialtiesButton = document.getElementById('specialtiesButton');
+            const specialtiesOptions = document.getElementById('specialtiesOptions');
+            const specialtyCheckboxes = specialtiesOptions.querySelectorAll('input[type="checkbox"]');
+            
+            specialtiesButton.addEventListener('click', function() {
+                specialtiesOptions.classList.toggle('active');
+                this.querySelector('i').classList.toggle('fa-chevron-down');
+                this.querySelector('i').classList.toggle('fa-chevron-up');
+            });
+            
+            // Close multi-select when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!specialtiesButton.contains(e.target) && !specialtiesOptions.contains(e.target)) {
+                    specialtiesOptions.classList.remove('active');
+                    specialtiesButton.querySelector('i').classList.add('fa-chevron-down');
+                    specialtiesButton.querySelector('i').classList.remove('fa-chevron-up');
+                }
+            });
+            
+            // Filter functionality
+            const artistSearch = document.getElementById('artistSearch');
+            const sortFilter = document.getElementById('sortFilter');
+            const artistCount = document.getElementById('artistCount');
+            const artistsContainer = document.getElementById('artistsContainer');
+            const artistCards = document.querySelectorAll('.artist-card');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const noResults = document.getElementById('noResults');
+            const paginationContainer = document.getElementById('pagination');
+            
+            // Pagination variables
+            const artistsPerPage = 6;
+            let currentPage = 1;
+            
+            function filterArtists() {
+                loadingIndicator.classList.add('active');
+                
+                // Simulate loading for better UX
+                setTimeout(() => {
+                    const searchValue = artistSearch.value.toLowerCase();
+                    const sortValue = sortFilter.value;
+                    
+                    // Get selected specialties
+                    const selectedSpecialties = [];
+                    specialtyCheckboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            selectedSpecialties.push(checkbox.value);
+                        }
+                    });
+                    
+                    let visibleCount = 0;
+                    let artists = [];
+                    
+                    // First filter by search and specialty
+                    artistCards.forEach(card => {
+                        const name = card.querySelector('.artist-name').textContent.toLowerCase();
+                        const desc = card.querySelector('.artist-desc').textContent.toLowerCase();
+                        const tags = Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                        const specialty = card.getAttribute('data-specialty');
+                        
+                        const matchesSearch = name.includes(searchValue) || desc.includes(searchValue) || 
+                                            tags.some(tag => tag.includes(searchValue));
+                        const matchesSpecialty = selectedSpecialties.length === 0 || selectedSpecialties.includes(specialty);
+                        
+                        if (matchesSearch && matchesSpecialty) {
+                            card.style.display = 'flex';
+                            visibleCount++;
+                            
+                            // Collect artist data for sorting
+                            artists.push({
+                                element: card,
+                                name: name,
+                                rating: parseFloat(card.getAttribute('data-rating')),
+                                followers: parseInt(card.getAttribute('data-followers'))
+                            });
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show no results message if needed
+                    if (visibleCount === 0) {
+                        noResults.classList.add('active');
+                    } else {
+                        noResults.classList.remove('active');
+                    }
+                    
+                    // Sort artists
+                    if (sortValue === 'name') {
+                        artists.sort((a, b) => a.name.localeCompare(b.name));
+                    } else if (sortValue === 'rating') {
+                        artists.sort((a, b) => b.rating - a.rating);
+                    } else if (sortValue === 'followers') {
+                        artists.sort((a, b) => b.followers - a.followers);
+                    }
+                    
+                    // Reorder artists in DOM
+                    artists.forEach(artist => {
+                        artistsContainer.appendChild(artist.element);
+                    });
+                    
+                    // Update count
+                    artistCount.textContent = visibleCount;
+                    
+                    // Setup pagination
+                    setupPagination(visibleCount);
+                    
+                    // Show appropriate page
+                    showPage(currentPage);
+                    
+                    loadingIndicator.classList.remove('active');
+                }, 500); // Simulate 500ms loading time
+            }
+            
+            // Pagination functions
+            function setupPagination(totalArtists) {
+                paginationContainer.innerHTML = '';
+                const pageCount = Math.ceil(totalArtists / artistsPerPage);
+                
+                if (pageCount <= 1) {
+                    paginationContainer.style.display = 'none';
+                    return;
+                }
+                
+                paginationContainer.style.display = 'flex';
+                
+                for (let i = 1; i <= pageCount; i++) {
+                    const button = document.createElement('button');
+                    button.innerText = i;
+                    button.classList.add('pagination-btn');
+                    if (i === currentPage) button.classList.add('active');
+                    
+                    button.addEventListener('click', () => {
+                        currentPage = i;
+                        showPage(currentPage);
+                        
+                        // Update active state
+                        paginationContainer.querySelectorAll('.pagination-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        button.classList.add('active');
+                        
+                        // Scroll to top of artists section
+                        artistsContainer.scrollIntoView({ behavior: 'smooth' });
+                    });
+                    
+                    paginationContainer.appendChild(button);
+                }
+            }
+            
+            function showPage(page) {
+                const startIndex = (page - 1) * artistsPerPage;
+                const endIndex = startIndex + artistsPerPage;
+                let visibleIndex = 0;
+                
+                artistCards.forEach(card => {
+                    if (card.style.display !== 'none') {
+                        if (visibleIndex >= startIndex && visibleIndex < endIndex) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                        visibleIndex++;
+                    }
+                });
+            }
+            
+            // Add event listeners for filtering
+            artistSearch.addEventListener('input', () => {
+                currentPage = 1;
+                filterArtists();
+            });
+            
+            sortFilter.addEventListener('change', () => {
+                currentPage = 1;
+                filterArtists();
+            });
+            
+            specialtyCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    currentPage = 1;
+                    filterArtists();
+                });
+            });
+            
+            // Artist modal functionality
+            const artistModal = document.getElementById('artistModal');
+            const modalClose = document.getElementById('modalClose');
+            const modalImage = document.getElementById('modalImage');
+            const modalName = document.getElementById('modalName');
+            const modalStats = document.getElementById('modalStats');
+            const modalBio = document.getElementById('modalBio');
+            const modalTags = document.getElementById('modalTags');
+            const modalArtworks = document.getElementById('modalArtworks');
+            const profileButtons = document.querySelectorAll('.profile-btn');
+            
+            // Lightbox functionality
+            const lightbox = document.getElementById('lightbox');
+            const lightboxClose = document.getElementById('lightboxClose');
+            const lightboxImage = document.getElementById('lightboxImage');
+            
+            // Toast notification
+            const toast = document.getElementById('toast');
+            
+            function showToast(message) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Artist data for modal
+            const artistData = {
+                anya: {
+                    name: "Anya Sharma",
+                    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                    rating: 4.9,
+                    followers: 12500,
+                    bio: "Anya is a visionary artist who transforms discarded plastic into vibrant, intricate sculptures. With over 10 years of experience, she has developed unique techniques to melt, mold, and shape plastic waste into beautiful artworks that highlight both the problem of plastic pollution and the beauty that can be found in unexpected places. Her work has been exhibited in galleries across the country and has been featured in several environmental publications.",
+                    tags: ["Recycled plastic sculptures", "Upcycled household items", "Plastic bottle art", "Environmental installations"],
+                    artworks: [
+                        "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1549056572-75914d6d7e1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    ]
+                },
+                ben: {
+                    name: "Ben Carter",
+                    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                    rating: 4.7,
+                    followers: 8700,
+                    bio: "Ben specializes in textile upcycling, creating stunning tapestries and wearable art from fabric scraps and discarded clothing. His work challenges fast fashion conventions and promotes sustainable practices in the textile industry. With a background in fashion design, Ben brings technical expertise and artistic vision to every piece he creates.",
+                    tags: ["Textile upcycling", "Fabric collage", "Woven art", "Sustainable fashion"],
+                    artworks: [
+                        "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1516633630673-67bbad747022?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    ]
+                },
+                clara: {
+                    name: "Clara Rodriguez",
+                    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                    rating: 4.8,
+                    followers: 15300,
+                    bio: "Clara specializes in large-scale metal sculptures and installations using reclaimed industrial materials. Her work explores themes of transformation and resilience, giving new life to discarded metal objects. With a background in welding and metalworking, she creates powerful pieces that comment on consumerism and waste.",
+                    tags: ["Metal sculpture", "Industrial waste art", "Found object assemblage", "Public installations"],
+                    artworks: [
+                        "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1549056572-75914d6d7e1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    ]
+                },
+                david: {
+                    name: "David Lee",
+                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                    rating: 4.6,
+                    followers: 6200,
+                    bio: "David crafts delicate paper sculptures and collages from recycled paper, magazines, and cardboard. His intricate work showcases the versatility of paper as an artistic medium while promoting sustainability. Each piece tells a story of transformation from discarded material to cherished artwork.",
+                    tags: ["Paper art", "Cardboard sculpture", "Recycled paper collage", "Mixed media"],
+                    artworks: [
+                        "https://images.unsplash.com/photo-1580637250481-b78db3e6f84b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    ]
+                },
+                emily: {
+                    name: "Emily Chen",
+                    image: "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                    rating: 4.9,
+                    followers: 10100,
+                    bio: "Emily repurposes e-waste components into futuristic and thought-provoking art pieces. Her work highlights technology's environmental impact while demonstrating the aesthetic potential of discarded electronics. She holds a degree in both fine arts and environmental science.",
+                    tags: ["E-waste art", "Circuit board mosaics", "Recycled electronics", "Technology commentary"],
+                    artworks: [
+                        "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    ]
+                },
+                frank: {
+                    name: "Frank Green",
+                    image: "https://images.unsplash.com/photo-1567532939604-b6b5b0db1604?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                    rating: 4.5,
+                    followers: 4500,
+                    bio: "Frank focuses on ephemeral art using organic waste like dried leaves, seeds, and food scraps. His work explores nature's transient beauty and the cycle of growth and decay. Each piece is intentionally temporary, documenting the process through photography before returning to the earth.",
+                    tags: ["Organic waste art", "Natural material sculpture", "Ephemeral installations", "Environmental art"],
+                    artworks: [
+                        "https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                        "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    ]
+                }
+            };
+            
+            // Open modal when profile button is clicked
+            profileButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const artistId = this.getAttribute('data-artist');
+                    const artist = artistData[artistId];
+                    
+                    if (artist) {
+                        modalImage.src = artist.image;
+                        modalImage.alt = artist.name;
+                        modalName.textContent = artist.name;
+                        
+                        modalStats.innerHTML = `
+                            <span>⭐ ${artist.rating} Rating</span>
+                            <span>👥 ${artist.followers.toLocaleString()} Followers</span>
+                        `;
+                        
+                        modalBio.textContent = artist.bio;
+                        
+                        modalTags.innerHTML = '';
+                        artist.tags.forEach(tag => {
+                            const tagElement = document.createElement('span');
+                            tagElement.className = 'tag';
+                            tagElement.textContent = tag;
+                            modalTags.appendChild(tagElement);
+                        });
+                        
+                        modalArtworks.innerHTML = '';
+                        artist.artworks.forEach(artwork => {
+                            const img = document.createElement('img');
+                            img.src = artwork;
+                            img.alt = "Artwork by " + artist.name;
+                            img.className = 'artwork-thumb';
+                            img.addEventListener('click', () => {
+                                lightboxImage.src = artwork;
+                                lightboxImage.alt = "Artwork by " + artist.name;
+                                lightbox.classList.add('active');
+                                document.body.style.overflow = 'hidden';
+                            });
+                            modalArtworks.appendChild(img);
+                        });
+                        
+                        artistModal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+            
+            // Close modal
+            modalClose.addEventListener('click', function() {
+                artistModal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+            
+            // Close modal when clicking outside
+            artistModal.addEventListener('click', function(e) {
+                if (e.target === artistModal) {
+                    artistModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Close lightbox
+            lightboxClose.addEventListener('click', function() {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+            
+            // Close lightbox when clicking outside
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    lightbox.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Contact button functionality
+            document.querySelectorAll('.contact-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const artistName = this.closest('.artist-card').querySelector('.artist-name').textContent;
+                    showToast(`Contact request sent to ${artistName}! They will respond within 48 hours.`);
+                });
+            });
+            
+            // Join button functionality
+            document.getElementById('ctaJoinBtn').addEventListener('click', function() {
+                showToast("Thank you for your interest! Our team will contact you shortly.");
+            });
+            
+            // Animate cards on scroll
+            function animateOnScroll() {
+                const cards = document.querySelectorAll('.artist-card');
+                cards.forEach(card => {
+                    const cardTop = card.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (cardTop < windowHeight * 0.85) {
+                        card.classList.add('visible');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', animateOnScroll);
+            // Initial check on page load
+            animateOnScroll();
+            
+            // Initialize filtering
+            filterArtists();
+        });
+    </script>
+</body>
+</html>

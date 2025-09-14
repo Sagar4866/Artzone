@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtZone - Discover Art</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: #3e2723; /* Deep brown background */
+            color: #e9e0db; /* Light beige text */
+            overflow-x: hidden;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 5%;
+            background: linear-gradient(rgba(78, 52, 46, 0.85), rgba(66, 44, 43, 0.85)), url('https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover no-repeat;
+            color: #f5ebe0;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.8s;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #6d4c41; /* Medium brown */
+            color: #f5ebe0;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid #6d4c41;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 1.1s;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: #d7ccc8;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #f5ebe0;
+            border: 2px solid #d7ccc8;
+        }
+
+        .btn-outline:hover {
+            background: #d7ccc8;
+            color: #4e342e;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: #d7ccc8; /* Light brown text */
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background: #a1887f; /* Medium-light brown */
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 20px 5%;
+        }
+
+        .art-card {
+            background: #5d4037; /* Dark brown card */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .art-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .art-img {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .art-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .art-card:hover .art-img img {
+            transform: scale(1.1);
+        }
+
+        .art-info {
+            padding: 20px;
+        }
+
+        .art-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #efd5c3; /* Light cream */
+        }
+
+        .artist {
+            color: #bcaaa4; /* Light brown */
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .artist span {
+            color: #d7ccc8; /* Light beige */
+            font-weight: 600;
+        }
+
+        .art-desc {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #d7ccc8;
+        }
+
+        .art-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-weight: 700;
+            color: #efd5c3;
+            font-size: 18px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #4e342e; /* Dark brown */
+            color: #d7ccc8;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: #8d6e63; /* Medium brown */
+            color: white;
+            transform: rotate(360deg);
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px 5%;
+        }
+
+        .category {
+            background: #5d4037; /* Dark brown */
+            color: #d7ccc8;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category:hover {
+            background: #8d6e63; /* Medium brown */
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .category.active {
+            background: #a1887f; /* Light brown */
+            color: #3e2723; /* Dark text for contrast */
+        }
+
+        .newsletter {
+            background: linear-gradient(135deg, #5d4037 0%, #4e342e 100%);
+            color: #f5ebe0;
+            padding: 80px 5%;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .newsletter h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .newsletter p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-size: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px 0 0 30px;
+            font-size: 16px;
+            background: #d7ccc8;
+            color: #3e2723;
+        }
+
+        .form-btn {
+            background: #6d4c41;
+            color: #f5ebe0;
+            border: none;
+            padding: 0 25px;
+            border-radius: 0 30px 30px 0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .form-btn:hover {
+            background: #8d6e63;
+        }
+
+        footer {
+            background: #3e2723;
+            color: #d7ccc8;
+            padding: 40px 5%;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: #efd5c3;
+        }
+
+        .footer-section p {
+            line-height: 1.6;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: #d7ccc8;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #a1887f;
+        }
+
+        .copyright {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .form-group {
+                flex-direction: column;
+            }
+            
+            .form-input {
+                border-radius: 30px;
+                margin-bottom: 10px;
+            }
+            
+            .form-btn {
+                border-radius: 30px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <h1>Discover Extraordinary Art</h1>
+        <p>Explore a curated collection of artwork from talented artists around the world. Find pieces that inspire and transform your space.</p>
+        <a href="#" class="btn">Start Exploring</a>
+        <a href="#" class="btn btn-outline">Become a Member</a>
+    </section>
+
+    <h2 class="section-title">Featured Artwork</h2>
+
+    <div class="categories">
+        <div class="category active">All</div>
+        <div class="category">Paintings</div>
+        <div class="category">Sculptures</div>
+        <div class="category">Photography</div>
+        <div class="category">Digital</div>
+        <div class="category">Mixed Media</div>
+    </div>
+
+    <div class="gallery">
+        <div class="art-card">
+            <div class="art-img">
+                <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1450&q=80" alt="Abstract Art">
+            </div>
+            <div class="art-info">
+                <h3 class="art-title">Vibrant Dreams</h3>
+                <p class="artist">By <span>Maria Rodriguez</span></p>
+                <p class="art-desc">A captivating abstract piece that explores the relationship between color and emotion.</p>
+                <div class="art-meta">
+                    <div class="price">$1,200</div>
+                    <div class="actions">
+                        <button class="icon-btn"><i class="fas fa-heart"></i></button>
+                        <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="art-card">
+            <div class="art-img">
+                <img src="https://images.unsplash.com/photo-1515405295579-ba7b45403062?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80" alt="Landscape Painting">
+            </div>
+            <div class="art-info">
+                <h3 class="art-title">Mountain Serenity</h3>
+                <p class="artist">By <span>David Chen</span></p>
+                <p class="art-desc">A peaceful landscape capturing the majestic beauty of mountains at sunrise.</p>
+                <div class="art-meta">
+                    <div class="price">$2,400</div>
+                    <div class="actions">
+                        <button class="icon-btn"><i class="fas fa-heart"></i></button>
+                        <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="art-card">
+            <div class="art-img">
+                <img src="https://images.unsplash.com/photo-1516876437184-593fda40c7ce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80" alt="Sculpture">
+            </div>
+            <div class="art-info">
+                <h3 class="art-title">Eternal Form</h3>
+                <p class="artist">By <span>James Wilson</span></p>
+                <p class="art-desc">A bronze sculpture exploring the human form and its relationship with space.</p>
+                <div class="art-meta">
+                    <div class="price">$3,800</div>
+                    <div class="actions">
+                        <button class="icon-btn"><i class="fas fa-heart"></i></button>
+                        <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="art-card">
+            <div class="art-img">
+                <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80" alt="Portrait">
+            </div>
+            <div class="art-info">
+                <h3 class="art-title">Silent Contemplation</h3>
+                <p class="artist">By <span>Sophie Williams</span></p>
+                <p class="art-desc">An intimate portrait capturing a moment of deep reflection and inner peace.</p>
+                <div class="art-meta">
+                    <div class="price">$1,900</div>
+                    <div class="actions">
+                        <button class="icon-btn"><i class="fas fa-heart"></i></button>
+                        <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="art-card">
+            <div class="art-img">
+                <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1458&q=80" alt="Digital Art">
+            </div>
+            <div class="art-info">
+                <h3 class="art-title">Digital Dreams</h3>
+                <p class="artist">By <span>Alex Turner</span></p>
+                <p class="art-desc">A digital creation blending reality and imagination in a vibrant cyberpunk aesthetic.</p>
+                <div class="art-meta">
+                    <div class="price">$900</div>
+                    <div class="actions">
+                        <button class="icon-btn"><i class="fas fa-heart"></i></button>
+                        <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="art-card">
+            <div class="art-img">
+                <img src="https://images.unsplash.com/photo-1554188248-986adbb73be4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Mixed Media">
+            </div>
+            <div class="art-info">
+                <h3 class="art-title">Urban Layers</h3>
+                <p class="artist">By <span>Lena Petrov</span></p>
+                <p class="art-desc">Mixed media artwork incorporating found materials from urban environments.</p>
+                <div class="art-meta">
+                    <div class="price">$1,600</div>
+                    <div class="actions">
+                        <button class="icon-btn"><i class="fas fa-heart"></i></button>
+                        <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="newsletter">
+        <h2>Stay Inspired</h2>
+        <p>Subscribe to our newsletter for exclusive content, artist interviews, and early access to new collections.</p>
+        <div class="form-group">
+            <input type="email" class="form-input" placeholder="Your email address">
+            <button class="form-btn">Subscribe</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>ArtZone</h3>
+                <p>Connecting art lovers with talented artists from around the world. Discover unique pieces for your collection.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p>About Us</p>
+                <p>Contact</p>
+                <p>Blog</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 ArtZone. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Animation for art cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const artCards = document.querySelectorAll('.art-card');
+            
+            artCards.forEach((card, index) => {
+                // Apply animation with delay based on index
+                card.style.animation = `fadeInUp 1s forwards ${0.3 + index * 0.2}s`;
+            });
+            
+            // Add interactivity to category filters
+            const categories = document.querySelectorAll('.category');
+            categories.forEach(category => {
+                category.addEventListener('click', function() {
+                    categories.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // In a real application, this would filter the artwork
+                    // For this example, we'll just simulate a slight delay
+                    artCards.forEach(card => {
+                        card.style.opacity = '0';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                        }, 300);
+                    });
+                });
+            });
+            
+            // Add interactivity to like buttons
+            const likeButtons = document.querySelectorAll('.icon-btn:first-child');
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('liked');
+                    if (this.classList.contains('liked')) {
+                        this.style.background = '#8d6e63';
+                        this.style.color = 'white';
+                    } else {
+                        this.style.background = '#4e342e';
+                        this.style.color = '#d7ccc8';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

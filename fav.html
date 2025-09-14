@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ArtZone - Favorites Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(to bottom, #3a2c2c, #5d4b4b, #7a6363);
+      margin: 0;
+      padding: 0;
+      color: #f5f5f5;
+      min-height: 100vh;
+    }
+    header {
+      background: rgba(40, 30, 30, 0.85);
+      color: #e6d2c2;
+      padding: 1.5em 1em 1em 1em;
+      text-align: center;
+      box-shadow: 0 1px 16px rgba(0,0,0,0.2);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    header p {
+      margin-top: 0.5em;
+      color: #d6c4b4;
+    }
+    main {
+      max-width: 1100px;
+      margin: 2em auto;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.2);
+      padding: 2em;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    h2 {
+      font-size: 1.3em;
+      margin-bottom: 0.5em;
+      margin-top: 1.5em;
+      color: #e6d2c2;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.5em;
+      margin-bottom: 2em;
+    }
+    .art-item {
+      background: rgba(90, 70, 70, 0.4);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      padding: 1em;
+      position: relative;
+      transition: transform .15s linear;
+      cursor: pointer;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .art-item:hover {
+      transform: translateY(-6px) scale(1.02);
+      background: rgba(110, 85, 85, 0.5);
+    }
+    .art-image {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 0.8em;
+      background: #685757;
+    }
+    .art-title {
+      font-size: 1.09em;
+      font-weight: bold;
+      color: #e6d2c2;
+      margin-bottom: 0.5em;
+    }
+    .fav-btn {
+      background: none;
+      border: none;
+      position: absolute;
+      top: 1.2em;
+      right: 1em;
+      font-size: 1.6em;
+      color: #d6c4b4;
+      cursor: pointer;
+      transition: color 0.15s;
+      outline: none;
+      z-index: 2;
+    }
+    .fav-btn.favorited {
+      color: #e74b72;
+      animation: heart-pop 0.18s;
+    }
+    @keyframes heart-pop {
+      80% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .favorites-list {
+      padding: 1em;
+      background: rgba(90, 70, 70, 0.4);
+      border-radius: 14px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.2);
+      min-height: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .favorites-list .mini-art {
+      display: inline-block;
+      margin-right: 1em;
+      margin-bottom: 1em;
+      vertical-align: top;
+    }
+    .favorites-list .mini-art img {
+      width: 60px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.3);
+      display: block;
+    }
+    .favorites-list .mini-art span {
+      display: block;
+      font-size: 0.85em;
+      margin-top: 0.28em;
+      color: #e6d2c2;
+      text-align: center;
+      max-width: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    @media (max-width: 700px) {
+      main { padding: 0.5em; }
+      .gallery { gap: 0.7em; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ArtZone Album</h1>
+    <p>Discover and save your favorite works of art.</p>
+  </header>
+  <main>
+    <h2>Gallery</h2>
+    <div class="gallery" id="gallery">
+      <!-- Art items injected here -->
+    </div>
+
+    <h2>Your Favorites</h2>
+    <div class="favorites-list" id="favoritesList">
+      <em>Click the ♥ on artworks to add to your favorites!</em>
+    </div>
+  </main>
+  <script>
+    // Demo data for art items (image URLs are unsplash thumbnails)
+    const artworks = [
+      {
+        id: 1,
+        title: "Sunset Vista",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+      },
+      {
+        id: 2,
+        title: "Mountain Story",
+        image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80"
+      },
+      {
+        id: 3,
+        title: "Sea Escape",
+        image: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=400&q=80"
+      },
+      {
+        id: 4,
+        title: "Dream Fields",
+        image: "https://images.unsplash.com/photo-1465378552409-cce58a2076e1?auto=format&fit=crop&w=400&q=80"
+      },
+      {
+        id: 5,
+        title: "Midnight Forest",
+        image: "https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80"
+      },
+      {
+        id: 6,
+        title: "Desert Light",
+        image: "https://images.unsplash.com/photo-1454023492550-5696f8ff10e1?auto=format&fit=crop&w=400&q=80"
+      }
+    ];
+
+    let favorites = [];
+
+    // Render gallery
+    function renderGallery() {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
+      artworks.forEach(art => {
+        const item = document.createElement('div');
+        item.className = 'art-item';
+        item.innerHTML = `
+          <img src="${art.image}" alt="${art.title}" class="art-image" />
+          <span class="art-title">${art.title}</span>
+          <button class="fav-btn${favorites.includes(art.id) ? ' favorited' : ''}" data-id="${art.id}" aria-label="Add to favorites">
+            &#10084;
+          </button>
+        `;
+        gallery.appendChild(item);
+
+        // Add favorite click handler
+        item.querySelector('.fav-btn').addEventListener('click', function(ev) {
+          ev.stopPropagation();
+          toggleFavorite(art.id);
+        });
+      });
+    }
+
+    // Update favorites list
+    function renderFavorites() {
+      const favList = document.getElementById('favoritesList');
+      if (favorites.length === 0) {
+        favList.innerHTML = '<em>Click the ♥ on artworks to add to your favorites!</em>';
+        return;
+      }
+      favList.innerHTML = '';
+      favorites.forEach(favId => {
+        const art = artworks.find(a => a.id === favId);
+        if (art) {
+          const mini = document.createElement('div');
+          mini.className = 'mini-art';
+          mini.innerHTML = `
+            <img src="${art.image}" alt="${art.title}" />
+            <span>${art.title}</span>
+          `;
+          favList.appendChild(mini);
+        }
+      });
+    }
+
+    // Toggle favorite status
+    function toggleFavorite(id) {
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(favId => favId !== id);
+      } else {
+        favorites.push(id);
+      }
+      renderGallery();
+      renderFavorites();
+    }
+
+    // Initial render
+    renderGallery();
+    renderFavorites();
+  </script>
+</body>
+</html>

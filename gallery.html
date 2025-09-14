@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Artzone | Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Georgia', serif;
+      background: #ead5b8;
+      margin: 0;
+      color: #6f4c1b;
+    }
+    
+    /* Navigation */
+    .main-nav {
+      display: flex;
+      background: #dfc49d;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 5%;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo { 
+      font-size: 1.8em; 
+      font-weight: 700;
+      color: #6f4c1b;
+    }
+    
+    .nav-links { 
+      display: flex; 
+      list-style: none; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    .nav-links li a { 
+      color: #6f4c1b; 
+      text-decoration: none; 
+      padding: 0 16px; 
+      font-size: 1em; 
+      transition: color 0.3s;
+      position: relative;
+    }
+    
+    .nav-links li a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: #b47a2c;
+      transition: width 0.3s;
+    }
+    
+    .nav-links li a:hover:after { 
+      width: 100%;
+    }
+    
+    .nav-actions { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+    }
+    
+    .searchbox { 
+      padding: 7px 13px; 
+      border-radius: 7px; 
+      border: 1px solid #cbb493; 
+      outline: none;
+    }
+    
+    .nav-btn { 
+      padding: 7px 18px; 
+      background: #6f4c1b; 
+      color: #fff; 
+      border: none; 
+      border-radius: 18px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: all 0.3s;
+    }
+    
+    .nav-btn:hover {
+      background: #58462f;
+      transform: translateY(-2px);
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #6f4c1b;
+      cursor: pointer;
+    }
+    
+    /* Gallery Header */
+    header {
+      background: #dfc49d;
+      padding: 40px 0 30px 0;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .gallery-title {
+      font-size: 3.2em;
+      font-weight: bold;
+      color: #6f4c1b;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: textDrop 1.2s cubic-bezier(.48,1.6,.34,1) 0.4s forwards;
+      margin-bottom: 10px;
+    }
+    
+    .gallery-desc {
+      font-size: 1.3em;
+      color: #6f4c1b;
+      margin-top: 10px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: textDrop 0.9s cubic-bezier(.48,1.6,.34,1) 1s forwards;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    @keyframes textDrop {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Filter Section */
+    .gallery-filters {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 30px 0;
+      flex-wrap: wrap;
+      background: #e3caa5;
+    }
+    
+    .filter-btn {
+      padding: 10px 20px;
+      background: #dfc49d;
+      border: 2px solid #b47a2c;
+      border-radius: 25px;
+      color: #6f4c1b;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+      background: #b47a2c;
+      color: #fff;
+    }
+    
+    /* Gallery Grid */
+    main {
+      padding: 40px 5%;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .gallery-grid {
+      display: grid;
+      gap: 30px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+    
+    .gallery-card {
+      background: #f4e2c2;
+      box-shadow: 0 4px 20px rgba(150,100,40,0.05);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: cardFade 1s cubic-bezier(.48,1.6,.34,1);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    
+    .gallery-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    @keyframes cardFade {
+      from { opacity: 0; transform: scale(.93);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    
+    .gallery-card:hover {
+      transform: scale(1.035) translateY(-5px);
+      box-shadow: 0 10px 32px rgba(150,100,40,0.15);
+      z-index: 2;
+    }
+    
+    .gallery-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      filter: grayscale(10%) brightness(95%);
+      transition: filter 0.28s, transform 0.28s;
+      border-bottom: 1px solid #e0b882;
+    }
+    
+    .gallery-card:hover img {
+      filter: none;
+      transform: scale(1.04);
+    }
+    
+    .card-info {
+      padding: 18px 20px 20px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    
+    .card-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #6f4c1b;
+      letter-spacing: 0.2px;
+      transition: color 0.2s;
+    }
+    
+    .gallery-card:hover .card-title {
+      color: #b47a2c;
+    }
+    
+    .card-desc {
+      font-size: 1em;
+      color: #755b2b;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    
+    .card-tags {
+      font-size: 0.9em;
+      color: #8e7c4e;
+      margin-bottom: 8px;
+    }
+    
+    .card-price {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: #b47a2c;
+      color: #fff;
+      font-weight: 600;
+      padding: 8px 17px 8px 14px;
+      border-radius: 0 0 0 18px;
+      font-size: 1.1em;
+      box-shadow: 0 2px 8px rgba(175,130,70,0.11);
+      transition: background 0.3s;
+    }
+    
+    .gallery-card:hover .card-price {
+      background: #ad5c27;
+    }
+    
+    .card-status {
+      margin-top: 5px;
+      font-size: 0.95em;
+      color: #258d2d;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+    
+    .card-status.sold {
+      color: #b0302a;
+    }
+    
+    .gallery-btn {
+      background: #6f4c1b;
+      color: #fff;
+      font-size: 1em;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 28px;
+      margin-top: 15px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(90,60,20,0.08);
+      transition: background 0.2s, transform 0.17s, box-shadow 0.2s;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .gallery-btn:after {
+      content: "";
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 0; height: 0;
+      background: rgba(255,255,255,0.44);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s;
+      z-index: 0;
+    }
+    
+    .gallery-btn:active:after {
+      width: 210%; height: 180%;
+      transition: 0s;
+    }
+    
+    .gallery-btn:hover {
+      background: #b47a2c;
+      transform: scale(1.07);
+      box-shadow: 0 6px 24px rgba(150,100,40,0.13);
+    }
+    
+    /* Lightbox Modal */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+    
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+    }
+    
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 10px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+    }
+    
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      background: rgba(0,0,0,0.5);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .lightbox-caption {
+      color: white;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 1.2rem;
+    }
+    
+    /* Footer */
+    footer {
+      background: #dfc49d;
+      padding: 50px 5% 30px 5%;
+      font-size: 1em;
+      color: #7c541c;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      border-top: 1px solid #e2b48c;
+      margin-top: 50px;
+    }
+    
+    .footer-section { 
+      min-width: 220px; 
+      margin-bottom: 25px;
+    }
+    
+    .footer-section strong {
+      color: #6f4c1b;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .social-icons a {
+      color: #6f4c1b;
+      font-size: 1.5rem;
+      transition: all 0.3s;
+    }
+    
+    .social-icons a:hover {
+      color: #b47a2c;
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      width: 100%;
+      color: #ad8554;
+      font-size: 0.9em;
+      padding-top: 20px;
+      text-align: center;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .main-nav {
+        padding: 12px 4%;
+      }
+      
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #dfc49d;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      }
+      
+      .nav-links.active {
+        display: flex;
+      }
+      
+      .nav-links li {
+        margin: 10px 0;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .nav-actions {
+        display: none;
+      }
+      
+      .gallery-title {
+        font-size: 2.5em;
+      }
+      
+      .gallery-desc {
+        font-size: 1.1em;
+      }
+      
+      main { 
+        padding: 20px 3% 40px 3%;
+      }
+      
+      .gallery-grid { 
+        gap: 20px;
+        grid-template-columns: 1fr;
+      }
+      
+      footer { 
+        flex-direction: column; 
+        align-items: flex-start;
+        padding: 40px 5% 30px 5%;
+      }
+      
+      .footer-section {
+        margin-bottom: 30px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .gallery-title {
+        font-size: 2em;
+      }
+      
+      .gallery-desc {
+        font-size: 1em;
+      }
+      
+      .gallery-filters {
+        gap: 10px;
+      }
+      
+      .filter-btn {
+        padding: 8px 15px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="logo">Artzone</div>
+    <button class="mobile-menu-btn">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#">Discover</a></li>
+      <li><a href="#">Gallery</a></li>
+      <li><a href="#">Artists</a></li>
+      <li><a href="#">Waste to Art</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Events</a></li>
+    </ul>
+    <div class="nav-actions">
+      <input type="text" placeholder="Search artworks..." class="searchbox">
+      <button class="nav-btn">Join as Artist</button>
+      <button class="nav-btn">Sign In</button>
+    </div>
+  </nav>
+
+  <!-- Gallery Header -->
+  <header>
+    <div class="gallery-title">Art Gallery</div>
+    <div class="gallery-desc">Explore our curated collection of sustainable artworks created from waste materials</div>
+  </header>
+
+  <!-- Filter Section -->
+  <div class="gallery-filters">
+    <button class="filter-btn active" data-filter="all">All Artworks</button>
+    <button class="filter-btn" data-filter="sculpture">Sculpture</button>
+    <button class="filter-btn" data-filter="painting">Painting</button>
+    <button class="filter-btn" data-filter="textile">Textile Art</button>
+    <button class="filter-btn" data-filter="furniture">Furniture</button>
+    <button class="filter-btn" data-filter="jewelry">Jewelry</button>
+  </div>
+
+  <!-- Gallery Grid -->
+  <main>
+    <div class="gallery-grid">
+      <!-- Artwork 1 -->
+      <div class="gallery-card visible" data-category="sculpture">
+        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Plastic Bloom Art">
+        <div class="card-info">
+          <div class="card-title">Plastic Bloom</div>
+          <div class="card-desc">A vibrant and intricate sculpture crafted entirely from discarded plastic bottles.</div>
+          <div class="card-tags">Sculpture · PET plastic bottles, HDPE bottle caps, reclaimed wire, eco-friendly adhesive</div>
+          <div class="card-tags">15x10x10 inches</div>
+          <div class="card-status sold">Sold</div>
+        </div>
+        <div class="card-price">$520</div>
+        <button class="gallery-btn view-art" data-image="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-title="Plastic Bloom">View Art</button>
+      </div>
+
+      <!-- Artwork 2 -->
+      <div class="gallery-card visible" data-category="painting">
+        <img src="https://images.unsplash.com/photo-1515168833906-d2a3b82b3029?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Newsprint Narratives">
+        <div class="card-info">
+          <div class="card-title">Newsprint Narratives</div>
+          <div class="card-desc">An intricate paper art collage or sculpture, meticulously formed from old newspapers.</div>
+          <div class="card-tags">Paper Art · Recycled newspapers, non-toxic PVA glue, cardboard backing</div>
+          <div class="card-tags">12x12 inches</div>
+          <div class="card-status">Available</div>
+        </div>
+        <div class="card-price">$180</div>
+        <button class="gallery-btn view-art" data-image="https://images.unsplash.com/photo-1515168833906-d2a3b82b3029?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-title="Newsprint Narratives">View Art</button>
+      </div>
+
+      <!-- Artwork 3 -->
+      <div class="gallery-card visible" data-category="sculpture">
+        <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Shattered Serenity">
+        <div class="card-info">
+          <div class="card-title">Shattered Serenity</div>
+          <div class="card-desc">A stunning mosaic panel created from carefully selected and arranged pieces of broken glass.</div>
+          <div class="card-tags">Mosaic · Broken glass bottles, recycled wood panel, eco-friendly grout, adhesive</div>
+          <div class="card-tags">20x20 inches</div>
+          <div class="card-status">Available</div>
+        </div>
+        <div class="card-price">$450</div>
+        <button class="gallery-btn view-art" data-image="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-title="Shattered Serenity">View Art</button>
+      </div>
+
+      <!-- Artwork 4 -->
+      <div class="gallery-card visible" data-category="sculpture">
+        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Industrial Bloom">
+        <div class="card-info">
+          <div class="card-title">Industrial Bloom</div>
+          <div class="card-desc">A striking abstract sculpture forged from various pieces of discarded scrap metal.</div>
+          <div class="card-tags">Metal Sculpture · Reclaimed steel, copper wire, aluminum scraps, salvaged nuts and bolts</div>
+          <div class="card-tags">28x14x14 inches</div>
+          <div class="card-status">Available</div>
+        </div>
+        <div class="card-price">$680</div>
+        <button class="gallery-btn view-art" data-image="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-title="Industrial Bloom">View Art</button>
+      </div>
+
+      <!-- Artwork 5 -->
+      <div class="gallery-card visible" data-category="sculpture">
+        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ocean's Embrace">
+        <div class="card-info">
+          <div class="card-title">Ocean's Embrace</div>
+          <div class="card-desc">A mesmerizing sculpture crafted from thousands of discarded plastic bottles, shaped like a wave.</div>
+          <div class="card-tags">Sculpture · PET plastic bottles, metal frame, eco-friendly adhesive</div>
+          <div class="card-tags">72x48x36 inches</div>
+          <div class="card-status">Available</div>
+        </div>
+        <div class="card-price">$1250</div>
+        <button class="gallery-btn view-art" data-image="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-title="Ocean's Embrace">View Art</button>
+      </div>
+
+      <!-- Artwork 6 -->
+      <div class="gallery-card visible" data-category="painting">
+        <img src="https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Forest Whispers">
+        <div class="card-info">
+          <div class="card-title">Forest Whispers</div>
+          <div class="card-desc">An evocative mixed media painting on reclaimed barn wood, capturing the serenity of nature.</div>
+          <div class="card-tags">Mixed Media · Reclaimed wood panels, acrylic paints, natural pigments</div>
+          <div class="card-tags">36x24 inches</div>
+          <div class="card-status">Available</div>
+        </div>
+        <div class="card-price">$890</div>
+        <button class="gallery-btn view-art" data-image="https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-title="Forest Whispers">View Art</button>
+      </div>
+
+      <!-- Artwork 7 -->
+      <div class="gallery-card visible" data-category="jewelry">
+        <img src="https://images.unsplash.com/photo-1515168833906-d2a3b82b3029?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Digital Bloom Necklace">
+        <div class="card-info">
+          <div class="card-title">Digital Bloom Necklace</div>
+          <div class="card-desc">Unique wearable art, a necklace crafted from repurposed electronics and metals.</div>
+          <div class="card-tags">Jewelry · Recycled circuit boards, copper wire, sterling silver chain</div>
+          <div class="card-tags">18 inch chain, 3x2 inch pendant</div>
+          <div class="card-status">Available</div>
+        </div>
+        <div class="card-price">$185</div>
+        <button class="gallery-btn view-art" data-image="https://images.unsplash.com/photo-1515168833906-d2a3b82b3029?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-title="Digital Bloom Necklace">View Art</button>
+      </div>
+
+      <!-- Artwork 8 -->
+      <div class="gallery-card visible" data-category="textile">
+        <img src="https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Urban Tapestry">
+        <div class="card-info">
+          <div class="card-title">Urban Tapestry</div>
+          <div class="card-desc">A vibrant textile art piece created from discarded denim, cotton, and silk, embroidered to depict a cityscape.</div>
+          <div class="card-tags">Textile Art · Upcycled denim, cotton, silk, embroidery thread</div>
+          <div class="card-tags">40x30 inches</div>
+          <div class="card-status">Available</div>
+        </div>
+        <div class="card-price">$620</div>
+        <button class="gallery-btn view-art" data-image="https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-title="Urban Tapestry">View Art</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <span class="lightbox-close">&times;</span>
+      <img src="" alt="" id="lightbox-image">
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-section">
+      <strong>Artzone</strong>
+      <p>Transforming waste into wonder. Connect with eco-conscious artists who create beautiful art from discarded materials.</p>
+      <p>Eco-Friendly Art Platform</p>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-pinterest"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <strong>Explore</strong>
+      <p>Art Gallery</p>
+      <p>Featured Artists</p>
+      <p>Waste to Art</p>
+      <p>Blog & Stories</p>
+    </div>
+    <div class="footer-section">
+      <strong>Community</strong>
+      <p>Events & Workshops</p>
+      <p>Join as Artist</p>
+      <p>Growing Community</p>
+    </div>
+    <div class="footer-section">
+      <strong>Connect</strong>
+      <p>hello@artzone.eco</p>
+      <p>Made with love for our planet</p>
+    </div>
+    <div class="copyright">
+      © 2025 Artzone. Transforming waste into art, one creation at a time.
+    </div>
+  </footer>
+
+  <script>
+    // DOM Content Loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu toggle
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      const navLinks = document.querySelector('.nav-links');
+      
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+          navLinks.classList.toggle('active');
+          this.querySelector('i').classList.toggle('fa-bars');
+          this.querySelector('i').classList.toggle('fa-times');
+        });
+      }
+      
+      // Filter functionality
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const galleryCards = document.querySelectorAll('.gallery-card');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          
+          // Add active class to clicked button
+          button.classList.add('active');
+          
+          const filterValue = button.getAttribute('data-filter');
+          
+          // Filter cards
+          galleryCards.forEach(card => {
+            if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+              card.classList.add('visible');
+            } else {
+              card.classList.remove('visible');
+            }
+          });
+        });
+      });
+      
+      // Lightbox functionality
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImage = document.getElementById('lightbox-image');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+      const viewArtButtons = document.querySelectorAll('.view-art');
+      const closeLightbox = document.querySelector('.lightbox-close');
+      
+      viewArtButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const imageUrl = button.getAttribute('data-image');
+          const title = button.getAttribute('data-title');
+          
+          lightboxImage.src = imageUrl;
+          lightboxCaption.textContent = title;
+          lightbox.classList.add('active');
+          document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+      });
+      
+      closeLightbox.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = ''; // Enable scrolling
+      });
+      
+      // Close lightbox when clicking outside the image
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          lightbox.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+      
+      // Animate cards on scroll
+      const animateOnScroll = () => {
+        galleryCards.forEach(card => {
+          const cardPosition = card.getBoundingClientRect().top;
+          const screenPosition = window.innerHeight / 1.3;
+          
+          if (cardPosition < screenPosition && card.classList.contains('visible')) {
+            card.style.opacity = 1;
+            card.style.transform = 'translateY(0)';
+          }
+        });
+      };
+      
+      window.addEventListener('scroll', animateOnScroll);
+      // Initial call to check visible elements on page load
+      animateOnScroll();
+      
+      // Button Ripple Animation
+      document.querySelectorAll('.gallery-btn').forEach(btn => {
+        btn.addEventListener('click', function(e){
+          btn.classList.add('active');
+          setTimeout(() => btn.classList.remove('active'), 370);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

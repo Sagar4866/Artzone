@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Artzone Profile Account Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Artzone colors and fonts */
+    :root {
+      --bg: #f4e2c4;
+      --panel: #f3ddbb;
+      --accent: #543a1f;
+      --accent-light: #8c6b3f;
+      --text: #3e2a13;
+      --font: 'Georgia', serif;
+      --radius: 12px;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header, .footer {
+      background: var(--bg);
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 32px 16px 120px 16px;
+    }
+    header {
+      padding: 16px 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      font-size: 1.12rem;
+      border-bottom: 2px solid #e7d2b0;
+    }
+    header nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    header .logo {
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      margin-right: 16px;
+      text-shadow: 1px 2px 8px #d3c1a9;
+      animation: pop-in 900ms cubic-bezier(.41,.81,.5,1.41);
+    }
+    header nav a {
+      text-decoration: none;
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 5px;
+      transition: background 0.25s;
+    }
+    header nav a:hover {
+      background: var(--accent-light);
+      color: #fff;
+      animation: btn-hover 0.3s;
+    }
+    @keyframes btn-hover {
+      0% { transform: scale(1);}
+      30% { transform: scale(1.07);}
+      100% {transform: scale(1);}
+    }
+    @keyframes pop-in {
+      0% { opacity: 0; transform: scale(0.7);}
+      80% { opacity: 1; transform: scale(1.13);}
+      100% {opacity: 1; transform: scale(1);}
+    }
+    .profile-settings-title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-top: 26px;
+      margin-bottom: 4px;
+      animation: textFadeIn 1s;
+    }
+    @keyframes textFadeIn {
+      from { opacity: 0; transform: translateY(-24px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .section {
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 12px #e9dbb3bb;
+      padding: 24px;
+      margin-bottom: 30px;
+    }
+    .tab-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .tab-btn {
+      background: #e9dbb3;
+      border: none;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 500;
+      color: var(--accent);
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.26s;
+      box-shadow: 0 2px 8px #e9dbb388;
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 18px #633d11a2;
+    }
+    .tab-btn:hover:not(.active) {
+      background: var(--accent-light);
+      color: #fff;
+    }
+    .tab-content {
+      display: none;
+      animation: contentFadeIn 0.7s;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @keyframes contentFadeIn {
+      0% {opacity: 0; transform: translateY(18px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+    .profile-pic {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: #ff8c3b;
+      color: #fff;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      position: relative;
+      animation: pop-in 1s cubic-bezier(.41,.81,.5,1.41);
+    }
+    .profile-pic .cam {
+      position: absolute; right: 0; bottom: 0;
+      background: #eee9db;
+      border-radius: 50%;
+      width: 26px; height: 26px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid var(--accent);
+    }
+    .row {
+      display: flex; gap: 20px;
+      margin-bottom: 16px;
+    }
+    .col { flex: 1;}
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: var(--accent);
+      letter-spacing: 0.01em;
+    }
+    input, textarea {
+      width: 100%;
+      font-size: 1rem;
+      padding: 11px 16px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      border: 1px solid #e9dbb3;
+      background: #fffaf3;
+      transition: border-color 0.19s;
+      resize: none;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+    .switch-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 5px;
+    }
+    .switch-label {
+      font-weight: 500;
+      color: var(--text);
+    }
+    .switch {
+      position: relative;
+      width: 42px; height: 22px;
+      display: inline-block;
+    }
+    .switch input {
+      opacity: 0; width: 0; height: 0;
+    }
+    .slider {
+      position: absolute; cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #e9dbb3;
+      border-radius: 22px;
+      transition: .3s;
+    }
+    .slider:before {
+      position: absolute; content: "";
+      height: 18px; width: 18px; left: 2px; bottom: 2px;
+      background: var(--accent);
+      transition: .3s;
+      border-radius: 50%;
+    }
+    .switch input:checked + .slider {
+      background: var(--accent-light);
+    }
+    .switch input:checked + .slider:before {
+      transform: translateX(20px);
+      background: #fff;
+    }
+    .action-btn {
+      background: var(--accent);
+      color: #fff;
+      font-size: 1.09rem;
+      padding: 10px 24px;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      margin-top: 4px;
+      margin-bottom: 4px;
+      font-weight: 500;
+      position: relative;
+      transition: background 0.27s, transform 0.3s;
+      box-shadow: 0 3px 16px #633d1199;
+      letter-spacing: 0.01em;
+    }
+    .action-btn:hover {
+      background: var(--accent-light);
+      transform: scale(1.07);
+    }
+    .footer {
+      background: var(--panel);
+      padding: 44px 0 16px 0;
+      margin-top: 48px;
+      font-size: 1rem;
+      color: var(--accent);
+      box-shadow: 0 -2px 8px #e9dbb350;
+      border-top: 1px solid #e7d2b0;
+    }
+    .footer-content {
+      display: flex;
+      justify-content: space-around;
+      gap: 24px;
+      max-width: 1200px;
+      margin: auto;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .footer-block {
+      min-width: 180px;
+      max-width: 280px;
+    }
+    .footer-block strong {
+      font-size: 1.11rem;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .footer-block ul {
+      padding-left: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .footer-block li {
+      margin: 6px 0;
+      font-size: 1rem;
+      color: var(--accent);
+    }
+    .footer-social, .footer-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 4px 0;
+    }
+    .footer-bottom {
+      text-align: center;
+      font-size: 1rem;
+      margin-top: 12px;
+      color: #8c6b3f;
+    }
+    @media (max-width: 800px){
+      .container {max-width: 96vw; padding: 16px;}
+      .footer-content {flex-direction: column; align-items: flex-start;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">Artzone</span>
+    <nav>
+      <a href="#">Discover</a>
+      <a href="#">Gallery</a>
+      <a href="#">Artists</a>
+      <a href="#">Waste to Art</a>
+      <a href="#">Blog</a>
+      <a href="#">Events</a>
+    </nav>
+    <input type="text" placeholder="Search artists or artworks..." style="border-radius:7px; font-size:1rem; border:1px solid #d2c2a1; padding:6px 16px; min-width: 230px;" />
+    <a href="#" title="Cart"><span style="font-size:1.22rem; margin: 0 8px;">🛒</span></a>
+    <a href="#" title="Favorites"><span style="font-size:1.22rem; margin: 0 8px;">🤍</span></a>
+    <button class="action-btn" style="padding:1px 25px; font-size:1rem;">Join as Artist</button>
+  </header>
+
+  <div class="container">
+    <div class="profile-settings-title">Account Settings</div>
+    <div style="color: var(--accent); margin-bottom:22px;">Manage your account information, security, and preferences</div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="account">Account</button>
+      <button class="tab-btn" data-tab="security">Security</button>
+      <button class="tab-btn" data-tab="notifications">Notifications</button>
+    </div>
+
+    <!-- Account Tab Section -->
+    <div class="tab-content active" id="account">
+      <div class="section">
+        <div style="font-weight:bold; color:var(--accent); margin-bottom:16px;">Personal Information</div>
+        <div class="profile-pic">
+          M
+          <span class="cam">📷</span>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="firstName">First Name</label>
+            <input id="firstName" type="text" value="Mama">
+          </div>
+          <div class="col">
+            <label for="lastName">Last Name</label>
+            <input id="lastName" type="text" value="Maareech">
+          </div>
+        </div>
+        <label for="displayName">Display Name</label>
+        <input id="displayName" type="text" value="Mama Maareech">
+        <label for="title">Title/Profession</label>
+        <input id="title" type="text" placeholder="e.g., Art Collector, Eco-Artist, Sustainability Advocate">
+        <label for="bio">Bio</label>
+        <textarea id="bio" rows="3" placeholder="Tell us about yourself and your passion for sustainable art..."></textarea>
+        <label for="accEmail">Email Address</label>
+        <input id="accEmail" type="email" value="mamamaareech25@gmail.com">
+        <div style="color:#8c6b3f; font-size:0.97rem; margin-bottom:10px;">
+          Email address cannot be changed from this page. Contact support if needed.
+        </div>
+        <button class="action-btn">Save Changes</button>
+      </div>
+    </div>
+
+    <!-- Security Tab Section -->
+    <div class="tab-content" id="security">
+      <div class="section">
+        <div style="font-weight:bold; color:var(--accent); margin-bottom:16px;">Two-Factor Authentication</div>
+        <div style="margin-bottom:8px;">Add an extra layer of security to your account</div>
+        <button class="action-btn">Enable 2FA</button>
+      </div>
+      <div class="section">
+        <div style="font-weight:bold; color:var(--accent); margin-bottom:16px;">Login Sessions</div>
+        <div style="margin-bottom:8px;">Manage your active login sessions</div>
+        <button class="action-btn">View Sessions</button>
+      </div>
+    </div>
+
+    <!-- Notifications Tab Section -->
+    <div class="tab-content" id="notifications">
+      <div class="section">
+        <div style="font-weight: bold; color: var(--accent); margin-bottom: 14px;">Email Notifications</div>
+        <div class="switch-group">
+          <span class="switch-label">Enable Email Notifications</span>
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div style="font-size:0.99rem; color:var(--accent); margin-bottom:16px;">Receive notifications via email</div>
+        <div style="font-weight: bold; color: var(--accent); margin-bottom: 6px;">Notification Types</div>
+        <div class="switch-group">
+          <span class="switch-label">New Artworks</span>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+        <div class="switch-group">
+          <span class="switch-label">Artist Updates</span>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+        <div class="switch-group">
+          <span class="switch-label">Event Reminders</span>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+        <div class="switch-group">
+          <span class="switch-label">Marketing Emails</span>
+          <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+        <div class="switch-group">
+          <span class="switch-label">Weekly Digest</span>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+        <button class="action-btn">Save Preferences</button>
+      </div>
+      <div class="section" style="margin-bottom:0;">
+        <div style="font-weight:bold; color:var(--accent);">Communication Preferences</div>
+        <div class="footer-link">
+          <span style="font-size:1.1rem;">📧</span>
+          <span style="font-size:1.01rem;">Email: </span>
+        </div>
+        <div style="font-size:0.98rem; color:#8c6b3f;">
+          All notifications will be sent to this email address. To change your email, please contact support.
+        </div>
+      </div>
+    </div>
+
+    <!-- Favorites Section -->
+    <div class="section" style="text-align:center; margin-bottom:9px;">
+      <div class="profile-settings-title" style="font-size:1.35rem;">My Favorites</div>
+      <div style="font-size:1.04rem; margin-bottom:14px; color: var(--accent);">0 artworks saved</div>
+      <div style="font-size:3.2rem; margin-bottom:10px; color:var(--accent-light);">
+        <span>🤍</span>
+      </div>
+      <div style="font-size:1.17rem; font-weight:500; color:var(--accent); margin-bottom:18px;">
+        No Favorites Yet
+      </div>
+      <div style="font-size:1.07rem; color:#7c5a28; margin-bottom:12px;">
+        Start exploring and save artworks you love by clicking the heart icon
+      </div>
+      <button class="action-btn" style="margin-right: 10px;">Browse Gallery</button>
+      <button class="action-btn" style="background:#fff; color:var(--accent); box-shadow: 0 2px 12px #e4c99f;">Explore Waste Art</button>
+    </div>
+  </div>
+  
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-block">
+        <strong>Artzone</strong>
+        <div>Transforming waste into wonder. Connect with eco-conscious artists who create beautiful art from discarded materials.</div>
+        <div class="footer-social">
+          <span title="Eco-friendly">♻️</span>
+          <span>Eco-Friendly Art Platform</span>
+        </div>
+      </div>
+      <div class="footer-block">
+        <strong>Explore</strong>
+        <ul>
+          <li>Art Gallery</li>
+          <li>Featured Artists</li>
+          <li>Waste to Art</li>
+          <li>Blog & Stories</li>
+        </ul>
+      </div>
+      <div class="footer-block">
+        <strong>Community</strong>
+        <ul>
+          <li>Events & Workshops</li>
+          <li>Join as Artist</li>
+          <li class="footer-social"><span>👥</span> Growing Community</li>
+        </ul>
+      </div>
+      <div class="footer-block">
+        <strong>Connect</strong>
+        <div class="footer-link"><span>📧</span> hello@artzone.eco</div>
+        <div class="footer-link"><span>🤍</span> Made with love for our planet</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 Artzone. Transforming waste into art, one creation at a time.
+    </div>
+  </footer>
+  
+  <script>
+    // Tab switching logic + animations
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(cont => cont.classList.remove('active'));
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Button animation on click
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('mousedown', function () {
+        btn.style.transform = 'scale(0.92)';
+      });
+      btn.addEventListener('mouseup', function () {
+        btn.style.transform = 'scale(1)';
+      });
+      btn.addEventListener('mouseleave', function () {
+        btn.style.transform = 'scale(1)';
+      });
+    });
+
+    // Animate tab content on reveal (fade in effect via class)
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const activeTab = document.getElementById(btn.dataset.tab);
+        activeTab.classList.remove('active');
+        setTimeout(() => activeTab.classList.add('active'), 42);
+      });
+    });
+
+    // Switches: add a ripple effect on toggle
+    document.querySelectorAll('.switch input[type="checkbox"]').forEach(sw => {
+      sw.addEventListener('change', function () {
+        const slider = sw.nextElementSibling;
+        slider.style.boxShadow = '0 0 0 9px #dab0783e';
+        setTimeout(()=>{ slider.style.boxShadow=''; }, 210);
+      });
+    });
+  </script>
+</body>
+</html>

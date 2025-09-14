@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Artzone - Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    * {box-sizing: border-box; margin: 0; padding: 0;}
+    body {font-family: 'Roboto', sans-serif; background: #f8f4ec; color: #463c32;}
+    
+    /* Navigation Bar */
+    .navbar {
+      background: #f6e4c1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      height: 68px;
+      border-bottom: 1px solid #e6cfa8;
+      position: sticky; top: 0; z-index: 1050;
+    }
+    .nav-left {
+      display: flex; align-items: center;
+      gap: 32px;
+    }
+    .nav-logo {
+      font-size: 28px; font-weight: 700; color: #463c32; letter-spacing: -1px;
+      margin-right: 10px;
+    }
+    .nav-link {
+      font-size: 17px; color: #7c6c50; text-decoration: none; margin-right: 10px;
+      font-weight: 500; transition: color 0.2s;
+      position: relative;
+    }
+    .nav-link:hover {color: #c27832;}
+    
+    /* Cart Icon */
+    .nav-cart-icon {
+      position: relative; cursor: pointer;
+      margin-left: 16px; font-size: 24px; color: #63513a; transition: color 0.19s;
+      background: none; border: none; outline: none;
+    }
+    .nav-cart-icon:hover {color: #c27832; transform: scale(1.13);}
+    .nav-cart-count {
+      position: absolute; top: -8px; right: -12px; font-size: 12px;
+      background: #c27832; color: #fff; padding: 2px 8px; border-radius: 10px; font-weight: 700;
+      animation: popInCount 0.35s cubic-bezier(.55,1.9,.7,1);
+    }
+    @keyframes popInCount {
+      0% {transform: scale(0);}
+      85% {transform: scale(1.2);}
+      100% {transform: scale(1);}
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: 40px 5vw;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 30px;
+    }
+    .art-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+      transition: transform 0.3s;
+    }
+    .art-card:hover {
+      transform: translateY(-5px);
+    }
+    .art-image {
+      height: 220px;
+      background: linear-gradient(45deg, #f6e4c1, #e6cfa8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7c6c50;
+      font-size: 20px;
+    }
+    .art-details {
+      padding: 16px;
+    }
+    .art-title {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .art-artist {
+      color: #7c6c50;
+      margin-bottom: 12px;
+    }
+    .art-price {
+      font-weight: 700;
+      color: #c27832;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    .add-to-cart {
+      background: #7c6c50;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .add-to-cart:hover {
+      background: #c27832;
+    }
+    
+    /* Cart Page */
+    .cart-page {
+      display: none;
+      padding: 40px 5vw;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .cart-page.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .cart-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; font-size: 24px; font-weight: 700;
+      border-bottom: 1px solid #e6cfa8;
+      margin-bottom: 30px;
+    }
+    .back-to-home {
+      font-size: 16px; background: none; border: none; color: #63513a; cursor: pointer;
+      transition: color 0.22s; display: flex; align-items: center;
+    }
+    .back-to-home:hover { color: #c27832; }
+    .back-to-home i {
+      margin-right: 8px;
+    }
+    .cart-empty {
+      align-items: center; justify-content: center; display: flex; flex-direction: column;
+      text-align: center; padding: 60px 32px;
+      animation: fadeInText 1.2s;
+    }
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(30px);}
+      to   { opacity: 1; transform: translateY(0);}
+    }
+    .cart-empty-icon {
+      font-size: 80px; margin-bottom: 22px; color: #b5915a;
+      animation: iconBounce 1s infinite alternate;
+    }
+    @keyframes iconBounce {
+      from { transform: translateY(0);}
+      to   { transform: translateY(-12px);}
+    }
+    .cart-empty-title {
+      font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #63513a;
+    }
+    .cart-empty-desc {
+      font-size: 18px; color: #7c6c50; margin-bottom: 24px;
+    }
+    .cart-empty-btn {
+      background: #7c6c50; color: #fff; padding: 11px 32px; border: none; border-radius: 6px;
+      font-size: 16px; font-weight: 600; cursor: pointer;
+      transition: background 0.22s, transform 0.19s;
+      box-shadow: 0 2px 14px rgba(50,44,33,0.09);
+      animation: buttonPop 1s cubic-bezier(.45,1.6,.65,1) 0.3s;
+    }
+    .cart-empty-btn:hover { background: #c27832; transform: scale(1.07);}
+    @keyframes buttonPop {
+      0% {transform: scale(0.8);}
+      40% {transform: scale(1.12);}
+      80% {transform: scale(0.95);}
+      100% {transform: scale(1);}
+    }
+    
+    /* Button Animation */
+    .cart-empty-btn {
+      box-shadow: 0 0 0 0 #c27832;
+      animation: glowBtn 1.8s infinite;
+    }
+    @keyframes glowBtn {
+      0% {box-shadow: 0 0 0 0 #c27832;}
+      70% {box-shadow: 0 0 16px 4px #c27832;}
+      100% {box-shadow: 0 0 0 0 #c27832;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <span class="nav-logo">Artzone</span>
+      <a class="nav-link" href="#">Gallery</a>
+      <a class="nav-link" href="#">Artists</a>
+      <a class="nav-link" href="#">Waste to Art</a>
+      <a class="nav-link" href="#">Blog</a>
+      <a class="nav-link" href="#">Events</a>
+    </div>
+    <!-- Cart Icon with Count -->
+    <button class="nav-cart-icon" id="navCartBtn" aria-label="Open cart">
+      <i class="fa fa-shopping-cart"></i>
+      <span class="nav-cart-count">0</span>
+    </button>
+  </nav>
+  
+  <!-- Main Content Area -->
+  <div class="main-content" id="mainContent">
+    <h1>Welcome to Artzone</h1>
+    <p>Discover beautiful artworks and support talented artists.</p>
+    
+    <div class="gallery-grid">
+      <div class="art-card">
+        <div class="art-image">Abstract Painting</div>
+        <div class="art-details">
+          <div class="art-title">Sunset Dreams</div>
+          <div class="art-artist">By Maria Rodriguez</div>
+          <div class="art-price">$145</div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      
+      <div class="art-card">
+        <div class="art-image">Nature Photography</div>
+        <div class="art-details">
+          <div class="art-title">Forest Pathway</div>
+          <div class="art-artist">By James Wilson</div>
+          <div class="art-price">$89</div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      
+      <div class="art-card">
+        <div class="art-image">Sculpture</div>
+        <div class="art-details">
+          <div class="art-title">Dancing Figures</div>
+          <div class="art-artist">By Chloe Zhang</div>
+          <div class="art-price">$210</div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      
+      <div class="art-card">
+        <div class="art-image">Digital Art</div>
+        <div class="art-details">
+          <div class="art-title">Neon Dreams</div>
+          <div class="art-artist">By Alex Kim</div>
+          <div class="art-price">$75</div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Cart Page -->
+  <div class="cart-page" id="cartPage">
+    <div class="cart-header">
+      <span>🛒 Your Cart (0)</span>
+      <button class="back-to-home" id="backToHome">
+        <i class="fas fa-arrow-left"></i> Back to Home
+      </button>
+    </div>
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon"><i class="fa fa-shopping-bag"></i></div>
+      <div class="cart-empty-title">Your cart is empty</div>
+      <div class="cart-empty-desc">Add some beautiful artworks to get started</div>
+      <button class="cart-empty-btn" id="browseGallery">Browse Gallery</button>
+    </div>
+  </div>
+  
+  <script>
+    const cartPage = document.getElementById('cartPage');
+    const mainContent = document.getElementById('mainContent');
+    const navCartBtn = document.getElementById('navCartBtn');
+    const backToHome = document.getElementById('backToHome');
+    const browseGallery = document.getElementById('browseGallery');
+    const cartCount = document.querySelector('.nav-cart-count');
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    
+    let cartItems = 0;
+
+    // Function to open the cart page
+    function openCartPage() {
+      mainContent.style.display = 'none';
+      cartPage.classList.add('active');
+    }
+    
+    // Function to close the cart page
+    function closeCartPage() {
+      mainContent.style.display = 'block';
+      cartPage.classList.remove('active');
+    }
+
+    // Event listeners
+    navCartBtn.addEventListener('click', openCartPage);
+    backToHome.addEventListener('click', closeCartPage);
+    
+    // Add to cart functionality
+    addToCartButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        cartItems++;
+        cartCount.textContent = cartItems;
+        
+        // Update cart header
+        document.querySelector('.cart-header span').textContent = `🛒 Your Cart (${cartItems})`;
+        
+        // If items in cart, show different message
+        if (cartItems > 0) {
+          document.querySelector('.cart-empty-title').textContent = 'Items in your cart';
+          document.querySelector('.cart-empty-desc').textContent = `You have ${cartItems} item${cartItems !== 1 ? 's' : ''} in your cart`;
+        }
+        
+        // Show success animation
+        button.textContent = 'Added to Cart!';
+        button.style.background = '#4caf50';
+        setTimeout(() => {
+          button.textContent = 'Add to Cart';
+          button.style.background = '';
+        }, 1500);
+      });
+    });
+    
+    // Browse gallery button
+    browseGallery.addEventListener('click', function() {
+      closeCartPage();
+      // Scroll to gallery section
+      document.querySelector('.gallery-grid').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

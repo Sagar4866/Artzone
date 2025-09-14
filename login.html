@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Artzone | Login / Sign In</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #473920;
+      --background: #f5e3c2;
+      --accent: #83623d;
+      --button: #473920;
+      --button-hover: #83623d;
+      --white: #fff;
+      --border-radius: 10px;
+      --transition: 0.3s;
+      --font: 'Georgia', 'Poppins', sans-serif;
+      --error: #d32f2f;
+      --success: #388e3c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    /* Header/NAV styles */
+    .navbar {
+      background: var(--background);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      box-shadow: 0 1px 8px rgba(80,60,30,0.05);
+    }
+
+    .navbar-logo {
+      font-weight: bold;
+      font-size: 1.6rem;
+      color: var(--primary);
+      letter-spacing: 2px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .navbar-logo i {
+      font-size: 1.8rem;
+    }
+
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      color: var(--accent);
+    }
+
+    .navbar-menu a {
+      text-decoration: none;
+      color: var(--accent);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: color var(--transition);
+      position: relative;
+    }
+
+    .navbar-menu a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--primary);
+      transition: width var(--transition);
+    }
+
+    .navbar-menu a:hover {
+      color: var(--primary);
+    }
+
+    .navbar-menu a:hover:after {
+      width: 100%;
+    }
+
+    .navbar-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .navbar-btn {
+      border: 1px solid var(--accent);
+      background: var(--white);
+      color: var(--primary);
+      border-radius: var(--border-radius);
+      padding: 7px 16px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), transform var(--transition);
+      margin-left: 4px;
+    }
+
+    .navbar-btn.signin {
+      background: var(--button);
+      color: var(--white);
+      border: 1px solid var(--button);
+    }
+
+    .navbar-btn:hover,
+    .navbar-btn.signin:hover {
+      background: var(--button-hover);
+      color: var(--white);
+      transform: scale(1.06);
+    }
+
+    /* Page Container */
+    .main-container {
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 75vh;
+      padding: 20px;
+    }
+
+    /* Centered login box */
+    .login-card {
+      background: var(--background);
+      box-shadow: 0 2px 24px rgba(80,60,30,0.08);
+      border-radius: var(--border-radius);
+      padding: 42px 34px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      animation: fadeInUp 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(60px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Icon styles */
+    .user-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 20px auto;
+      display: block;
+      opacity: 0.8;
+    }
+
+    /* Page Title */
+    .login-title {
+      color: var(--primary);
+      font-size: 2.1em;
+      font-weight: bold;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+      animation: textPop 0.7s;
+    }
+    @keyframes textPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.98) translateY(20px);
+      }
+      75% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    .login-desc {
+      color: #83623d;
+      font-size: 1em;
+      margin-bottom: 22px;
+      opacity: 0.97;
+      font-weight: 500;
+      animation: fadeInUp 0.7s 0.2s backwards;
+    }
+
+    /* Social logins */
+    .social-login-group {
+      margin: 28px 0 18px 0;
+    }
+
+    .social-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--white);
+      color: #222;
+      border: 1.2px solid #d3c2aa;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      font-size: 1em;
+      padding: 10px 0;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: box-shadow var(--transition), transform var(--transition);
+      box-shadow: 0 2px 8px rgba(80,60,30,0.03);
+    }
+
+    .social-btn.facebook {
+      background: #1877f2;
+      color: var(--white);
+      border: none;
+    }
+    .social-btn:hover {
+      box-shadow: 0 2px 16px rgba(80,60,30,0.09);
+      transform: scale(1.04);
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      color: #baa78e;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #d3c2aa;
+    }
+
+    .divider span {
+      padding: 0 10px;
+      font-size: 0.9em;
+    }
+
+    /* Email login form */
+    .email-login-form {
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    .email-login-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: var(--border-radius);
+      border: 1px solid #d3c2aa;
+      font-size: 1em;
+      transition: border var(--transition), background var(--transition);
+      background: var(--white);
+    }
+    
+    .email-login-form input:focus {
+      border-color: var(--accent);
+      background: #f7e7cf;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(131, 98, 61, 0.2);
+    }
+    
+    .password-container {
+      position: relative;
+    }
+    
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+    }
+    
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .remember-me input {
+      width: auto;
+    }
+    
+    .forgot-password {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    
+    .forgot-password:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    /* Main Login Button */
+    .login-btn {
+      width: 100%;
+      background: var(--button);
+      color: var(--white);
+      border-radius: var(--border-radius);
+      border: none;
+      padding: 14px 0;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background var(--transition), transform var(--transition);
+      box-shadow: 0 1px 9px rgba(80,60,30,0.06);
+    }
+    .login-btn:hover {
+      background: var(--button-hover);
+      transform: scale(1.03);
+    }
+
+    /* Message styles */
+    .message {
+      padding: 12px;
+      border-radius: var(--border-radius);
+      margin-bottom: 16px;
+      text-align: center;
+      display: none;
+    }
+    
+    .error-message {
+      background-color: #ffebee;
+      color: var(--error);
+      border: 1px solid #ffcdd2;
+    }
+    
+    .success-message {
+      background-color: #e8f5e9;
+      color: var(--success);
+      border: 1px solid #c8e6c9;
+    }
+
+    /* Back, Sign up links */
+    .extra-links {
+      margin-top: 18px;
+      font-size: 0.99em;
+    }
+    .extra-links a {
+      color: var(--accent);
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color var(--transition);
+      margin-left: 8px;
+    }
+    .extra-links a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+    
+    .footer-links {
+      margin-top: 8px;
+    }
+    
+    .footer-links a {
+      color: var(--accent);
+      text-decoration: none;
+      margin: 0 10px;
+      transition: color var(--transition);
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px 20px;
+      }
+      
+      .navbar-menu {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .login-card {
+        padding: 30px 20px;
+      }
+    }
+    
+    @media (max-width: 500px) {
+      .navbar-menu {
+        gap: 12px;
+      }
+      
+      .navbar-menu a {
+        font-size: 0.9rem;
+      }
+      
+      .navbar-actions {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+      
+      .navbar-btn {
+        width: 100%;
+        text-align: center;
+        margin-left: 0;
+      }
+      
+      .form-options {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="#" class="navbar-logo">
+      <i class="fas fa-palette"></i>
+      <span>Artzone</span>
+    </a>
+    <div class="navbar-menu">
+      <a href="#">Discover</a>
+      <a href="#">Gallery</a>
+      <a href="#">Artists</a>
+      <a href="#">Waste to Art</a>
+      <a href="#">Blog</a>
+      <a href="#">Events</a>
+    </div>
+    <div class="navbar-actions">
+      <button class="navbar-btn">Join as Artist</button>
+      <button class="navbar-btn signin">Sign In</button>
+    </div>
+  </nav>
+  
+  <div class="main-container">
+    <div class="login-card" id="loginCard">
+      <!-- User icon (svg) -->
+      <svg class="user-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 60 60">
+        <circle cx="30" cy="22" r="12" stroke="#473920" stroke-width="3" />
+        <path d="M12 50c0-7.5 11-11.5 18-11.5s18 4 18 11.5" stroke="#473920" stroke-width="3" fill="none"/>
+      </svg>
+      
+      <div class="login-title">Sign In Required</div>
+      <div class="login-desc">Please sign in to your account to join as an artist and start sharing your sustainable creations.</div>
+      
+      <!-- Message area -->
+      <div id="messageArea" class="message"></div>
+
+      <!-- Social login buttons -->
+      <div class="social-login-group">
+        <button class="social-btn" id="googleLogin">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" width="20" alt="Google logo">
+          Log in with Google
+        </button>
+        <button class="social-btn facebook" id="facebookLogin">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" width="18" alt="Facebook logo">
+          Log in with Facebook
+        </button>
+      </div>
+      
+      <div class="divider">
+        <span>or</span>
+      </div>
+      
+      <!-- Email login -->
+      <form class="email-login-form" id="emailLoginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-container">
+            <input type="password" id="password" placeholder="Enter your password" required minlength="6">
+            <button type="button" class="toggle-password" id="togglePassword">
+              <i class="far fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe">
+            Remember me
+          </label>
+          <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+        
+        <button type="submit" class="login-btn">Log in with Email</button>
+      </form>
+      
+      <div class="extra-links">
+        New to this site? <a href="#">Sign Up</a> |
+        <a href="#">Back to Artists</a>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+    <p>&copy; 2023 Artzone. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact Us</a>
+      <a href="#">About</a>
+    </div>
+  </footer>
+  
+  <script>
+    // Button animation (bounce on click)
+    document.querySelectorAll('.login-btn, .social-btn').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        btn.style.transform = "scale(0.97)";
+        setTimeout(function(){
+          btn.style.transform = "";
+        }, 180);
+      });
+    });
+
+    // Toggle password visibility
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    
+    togglePassword.addEventListener('click', function() {
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      
+      // Toggle eye icon
+      const eyeIcon = this.querySelector('i');
+      eyeIcon.classList.toggle('fa-eye');
+      eyeIcon.classList.toggle('fa-eye-slash');
+    });
+
+    // Google/Facebook login simulation
+    document.getElementById('googleLogin').onclick = function(e){
+      e.preventDefault();
+      showLoading("Redirecting to Google...");
+      setTimeout(function(){ 
+        showMessage("Google login simulated. In a real application, you would be redirected to Google's authentication service.", 'success');
+        hideLoading(); 
+      }, 1200);
+    }
+    
+    document.getElementById('facebookLogin').onclick = function(e){
+      e.preventDefault();
+      showLoading("Redirecting to Facebook...");
+      setTimeout(function(){ 
+        showMessage("Facebook login simulated. In a real application, you would be redirected to Facebook's authentication service.", 'success');
+        hideLoading(); 
+      }, 1200);
+    }
+
+    // Loading message popup
+    function showLoading(text){
+      let loader = document.createElement('div');
+      loader.id = "loaderPopup";
+      loader.style.position = 'fixed';
+      loader.style.top = '0'; loader.style.left = '0';
+      loader.style.width = '100vw'; loader.style.height = '100vh';
+      loader.style.background = "rgba(245,227,194,0.85)";
+      loader.style.display = 'flex';
+      loader.style.justifyContent = 'center';
+      loader.style.alignItems = 'center';
+      loader.style.zIndex = '1000';
+      loader.innerHTML = `<div style="
+        background:#fff9ef;padding:36px 25px;
+        border-radius:14px;
+        font-size:1.3em;font-weight:bold;
+        color:var(--primary);
+        box-shadow:0 2px 20px #47392022;
+        animation:fadeInUp 0.44s;">
+        <i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>
+        ${text || "Loading..."}
+      </div>`;
+      document.body.appendChild(loader);
+    }
+    
+    function hideLoading(){
+      let loader = document.getElementById('loaderPopup');
+      if(loader){document.body.removeChild(loader);}
+    }
+    
+    // Show message function
+    function showMessage(message, type) {
+      const messageArea = document.getElementById('messageArea');
+      messageArea.textContent = message;
+      messageArea.className = 'message';
+      messageArea.classList.add(type === 'error' ? 'error-message' : 'success-message');
+      messageArea.style.display = 'block';
+      
+      // Auto hide after 5 seconds
+      setTimeout(() => {
+        messageArea.style.display = 'none';
+      }, 5000);
+    }
+
+    // Email login basic validation mock
+    document.getElementById('emailLoginForm').onsubmit = function(e){
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      // Basic validation
+      if (!email || !password) {
+        showMessage('Please fill in all fields', 'error');
+        return;
+      }
+      
+      if (password.length < 6) {
+        showMessage('Password must be at least 6 characters', 'error');
+        return;
+      }
+      
+      // Email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showMessage('Please enter a valid email address', 'error');
+        return;
+      }
+      
+      showLoading("Signing in...");
+      setTimeout(function(){
+        showMessage("Login successful! Welcome to Artzone.", 'success');
+        hideLoading();
+        
+        // In a real application, you would redirect the user here
+        // window.location.href = '/dashboard';
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

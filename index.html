@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Artzone - Transform Waste into Wonder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:700,400|Roboto:400,500" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6a573a;
+      --secondary: #bc8a5e;
+      --accent: #aa8043;
+      --light: #f8f0e3;
+      --dark: #5d4534;
+      --background: #f2e2c1;
+      --card-bg: #f8f0e3;
+      --text-light: #726248;
+      --shadow: rgba(108, 84, 48, 0.14);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background: var(--background);
+      font-family: 'Merriweather', serif;
+      color: var(--dark);
+      margin: 0;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Navigation Bar */
+    .main-nav {
+      display: flex;
+      background: #e6d1b5;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 3vw;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo { 
+      font-size: 1.8em; 
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .nav-links { 
+      display: flex; 
+      list-style: none; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    .nav-links li a { 
+      color: var(--dark); 
+      text-decoration: none; 
+      padding: 0 16px; 
+      font-size: 1em; 
+      transition: color 0.3s;
+      position: relative;
+    }
+    
+    .nav-links li a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: var(--secondary);
+      transition: width 0.3s;
+    }
+    
+    .nav-links li a:hover:after { 
+      width: 100%;
+    }
+    
+    .nav-actions { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--primary);
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    .icon-btn:hover {
+      background: rgba(96, 70, 32, 0.1);
+      transform: scale(1.1);
+    }
+    .searchbox { 
+      padding: 7px 13px; 
+      border-radius: 7px; 
+      border: 1px solid #cbb493; 
+      outline: none;
+      font-family: 'Roboto', sans-serif;
+    }
+    
+    .nav-btn { 
+      padding: 7px 18px; 
+      background: var(--primary); 
+      color: #fff; 
+      border: none; 
+      border-radius: 18px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: all 0.3s;
+    }
+    
+    .nav-btn:hover {
+      background: #58462f;
+      transform: translateY(-2px);
+    }
+    
+    .sign-in { 
+      background: #3c2c19; 
+    }
+    
+    .sign-in:hover {
+      background: #2a1e12;
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--dark);
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    .hero-artzone {
+      background: linear-gradient(rgba(237, 211, 175, 0.9), rgba(237, 211, 175, 0.7)), url('https://images.unsplash.com/photo-1519996529937-47d2f4fcc42f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+      background-size: cover;
+      background-position: center;
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-content {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+    
+    .hero-text { 
+      flex: 1; 
+    }
+    
+    .hero-text h1 {
+      font-size: 3.5em;
+      font-weight: bold;
+      letter-spacing: .04em;
+      margin-bottom: 18px;
+      line-height: 1.1;
+      color: var(--dark);
+      animation: fadeInUp 0.7s ease forwards;
+    }
+    
+    .hero-text p {
+      font-size: 1.3em;
+      margin-bottom: 18px;
+      color: var(--text-light);
+      animation: fadeInUp 0.7s ease forwards 0.13s;
+    }
+    
+    .search-group {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 18px;
+      max-width: 500px;
+    }
+    
+    .search-group input { 
+      flex: 1;
+      padding: 12px 18px; 
+      border-radius: 7px; 
+      border: 1px solid #bca06d;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1rem;
+    }
+    
+    .search-group button { 
+      padding: 12px 24px; 
+      border-radius: 7px; 
+      background: var(--accent); 
+      color: #fff; 
+      border: none; 
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .search-group button:hover {
+      background: #946b35;
+      transform: translateY(-2px);
+    }
+    
+    .hero-buttons { 
+      display: flex; 
+      gap: 15px; 
+      margin-top: 25px;
+    }
+    
+    .hero-buttons button { 
+      background: var(--primary); 
+      color: #fff; 
+      border: none; 
+      border-radius: 16px; 
+      padding: 14px 32px; 
+      font-size: 1em; 
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .hero-buttons button:hover {
+      background: #58462f;
+      transform: translateY(-2px);
+    }
+    
+    .hero-buttons button:last-child {
+      background: var(--secondary);
+    }
+    
+    .hero-buttons button:last-child:hover {
+      background: #a87a52;
+    }
+    
+    .hero-image { 
+      position: relative;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .hero-image img { 
+      width: 100%; 
+      max-width: 450px;
+      border-radius: 18px; 
+      box-shadow: 0 20px 50px var(--shadow);
+      transition: transform 0.3s;
+    }
+    
+    .hero-image img:hover {
+      transform: scale(1.02);
+    }
+    
+    .hero-caption { 
+      position: absolute; 
+      bottom: 15px; 
+      left: 15px; 
+      background: rgba(237, 211, 175, 0.85); 
+      color: #786042; 
+      padding: 8px 17px; 
+      border-radius: 10px; 
+      font-weight: 600; 
+      box-shadow: 0 2px 16px rgba(108,84,48,0.09);
+      animation: pulse 2s infinite;
+    }
+
+    /* Eco Stats Section */
+    .stats-artzone {
+      background: #dcc39e;
+      padding: 80px 0;
+      text-align: center;
+    }
+    
+    .stat-group {
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      flex-wrap: wrap;
+    }
+    
+    .stat-card {
+      text-align: center;
+      min-width: 170px;
+      background: none;
+      padding: 0 20px;
+    }
+    
+    .stat-icon {
+      font-size: 3em;
+      display: block;
+      margin-bottom: 15px;
+      color: var(--primary);
+      animation: bounce 2s infinite;
+    }
+    
+    .stat-card h2 {
+      font-size: 2.8em;
+      margin: 0 0 5px 0;
+      font-weight: bold;
+      color: var(--dark);
+    }
+    
+    .stat-card p {
+      font-size: 1.1em;
+      margin: 0;
+      color: var(--text-light);
+    }
+
+    /* Featured Artworks Gallery */
+    .featured-artworks {
+      background: #ecd9bb;
+      padding: 80px 0;
+      text-align: center;
+    }
+    
+    .featured-artworks h2 {
+      font-size: 2.8em;
+      margin-bottom: 15px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: var(--dark);
+    }
+    
+    .featured-artworks p {
+      color: var(--text-light);
+      margin-bottom: 40px;
+      font-size: 1.2em;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .artwork-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .artwork-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 36px rgba(120, 112, 92, 0.13);
+      padding: 17px 14px 18px 14px;
+      text-align: left;
+      position: relative;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+      overflow: hidden;
+    }
+    
+    .artwork-card:hover {
+      box-shadow: 0 16px 52px rgba(92,80,58,0.13);
+      transform: scale(1.04) translateY(-3px);
+    }
+    
+    .art-label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.88em;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 2;
+    }
+    
+    .artwork-image {
+      width: 100%;
+      height: 220px;
+      border-radius: 9px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 16px rgba(120,112,92,0.08);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .artwork-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .artwork-card:hover .artwork-image img {
+      transform: scale(1.1);
+    }
+    
+    .artwork-card h3 {
+      margin: 6px 0 5px 0;
+      font-size: 1.2em;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    
+    .artwork-card p {
+      font-size: 1em;
+      color: var(--text-light);
+      margin-bottom: 15px;
+      height: 60px;
+      overflow: hidden;
+    }
+    
+    .artwork-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .art-type, .art-price {
+      background: #dbc19b;
+      color: #8a6c45;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 0.98em;
+    }
+    
+    .art-price { 
+      font-weight: bold; 
+    }
+    
+    .gallery-actions { 
+      margin: 40px 0 0 0;
+    }
+    
+    .gallery-btn { 
+      background: var(--accent); 
+      color: #fff; 
+      border: none; 
+      border-radius: 13px; 
+      padding: 12px 36px; 
+      font-weight: 600; 
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .gallery-btn:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 100%;
+      top: 0;
+      left: -40px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: all 0.5s;
+      transform: skewX(-45deg);
+    }
+    
+    .gallery-btn:hover:after {
+      width: 200%;
+    }
+    
+    .gallery-btn:hover {
+      background: #946b35;
+      transform: translateY(-2px);
+    }
+
+    /* Meet Our Artists Section */
+    .artists-artzone {
+      background: #e6d1b5;
+      padding: 80px 0;
+      text-align: center;
+    }
+    
+    .artists-artzone h2 { 
+      font-size: 2.8em;
+      margin-bottom: 15px;
+      font-weight: bold;
+      color: var(--dark);
+    }
+    
+    .artists-artzone p { 
+      color: var(--text-light);
+      margin-bottom: 40px;
+      font-size: 1.2em;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .artist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .artist-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(148,122,85,0.11);
+      padding: 28px 20px 20px 20px;
+      text-align: center;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .artist-card:hover { 
+      box-shadow: 0 12px 44px rgba(148,122,85,0.19);
+      transform: scale(1.04) translateY(-2px);
+    }
+    
+    .artist-image {
+      width: 100px; 
+      height: 100px; 
+      border-radius: 50%;
+      margin: 0 auto 15px auto;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(148,122,85,0.2);
+      border: 3px solid var(--secondary);
+    }
+    
+    .artist-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .artist-card:hover .artist-image img {
+      transform: scale(1.1);
+    }
+    
+    .artist-card h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.2em;
+      color: var(--dark);
+    }
+    
+    .artist-card p {
+      font-size: 1em;
+      color: var(--text-light);
+      margin-bottom: 15px;
+      height: 60px;
+      overflow: hidden;
+    }
+    
+    .artist-meta {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      font-size: 0.98em;
+      color: #9b8977;
+    }
+    
+    .artist-btn { 
+      background: var(--primary); 
+      color: #fff; 
+      border: none; 
+      border-radius: 13px; 
+      padding: 12px 32px;
+      font-weight: 600;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: all 0.3s;
+    }
+    
+    .artist-btn:hover {
+      background: #58462f;
+      transform: translateY(-2px);
+    }
+
+    /* Upcoming Events Section */
+    .upcoming-events {
+      background: #ead1ac;
+      padding: 80px 0;
+      text-align: center;
+    }
+    
+    .upcoming-events h2 { 
+      font-size: 2.8em; 
+      margin-bottom: 15px; 
+      font-weight: bold; 
+      color: var(--dark);
+    }
+    
+    .upcoming-events p { 
+      color: var(--text-light); 
+      margin-bottom: 40px; 
+      font-size: 1.2em;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .event-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 36px rgba(148,122,85,0.11);
+      overflow: hidden;
+      text-align: left;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .event-card:hover {
+      box-shadow: 0 16px 42px rgba(92,80,58,0.13);
+      transform: scale(1.04) translateY(-3px);
+    }
+    
+    .event-img-box { 
+      position: relative; 
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .event-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .event-card:hover .event-img-box img {
+      transform: scale(1.1);
+    }
+    
+    .event-date {
+      position: absolute;
+      top: 13px;
+      right: 13px;
+      background: var(--secondary);
+      color: #fff;
+      font-size: 0.99em;
+      padding: 6px 13px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    
+    .event-content {
+      padding: 20px;
+    }
+    
+    .event-card h3 { 
+      margin: 0 0 10px 0; 
+      font-size: 1.3em; 
+      font-weight: bold; 
+      color: var(--dark);
+    }
+    
+    .event-card p { 
+      font-size: 1em; 
+      color: var(--text-light); 
+      margin-bottom: 0;
+    }
+    
+    .events-btn { 
+      background: var(--secondary); 
+      color: #fff; 
+      border: none; 
+      border-radius: 13px; 
+      padding: 12px 36px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      margin-top: 16px;
+      font-size: 1.1em;
+      transition: all 0.3s;
+    }
+    
+    .events-btn:hover {
+      background: #a87a52;
+      transform: translateY(-2px);
+    }
+
+    /* Footer Section */
+    footer {
+      background: #dcc39e;
+      color: #53402d;
+      padding: 60px 0 0 0;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 40px 20px;
+    }
+    
+    .footer-content div { 
+      max-width: 100%;
+    }
+    
+    .footer-content h4 { 
+      margin-bottom: 15px;
+      font-size: 1.3em;
+      color: var(--dark);
+    }
+    
+    .footer-content p {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .social-icons a {
+      color: var(--dark);
+      font-size: 1.5rem;
+      transition: all 0.3s;
+    }
+    
+    .social-icons a:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      background: #c9b28e;
+      color: #6d5e4c;
+      font-size: 1em;
+      padding: 20px 0;
+    }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeInUp 0.7s ease forwards;
+    }
+    
+    .fade-in.delay-1 { animation-delay: 0.15s; }
+    .fade-in.delay-2 { animation-delay: 0.3s; }
+    .fade-in.delay-3 { animation-delay: 0.45s; }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(30px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(188, 138, 94, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(188, 138, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(188, 138, 94, 0); }
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+      40% {transform: translateY(-20px);}
+      60% {transform: translateY(-10px);}
+    }
+    
+    /* Text animation */
+    .text-reveal {
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .text-reveal:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--secondary);
+      transform: translateX(-100%);
+      animation: textReveal 1.5s ease forwards;
+      animation-delay: 0.5s;
+    }
+    
+    @keyframes textReveal {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(101%); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1050px) {
+      .hero-content { 
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .hero-text {
+        margin-bottom: 40px;
+      }
+      
+      .search-group {
+        margin: 0 auto 18px auto;
+      }
+      
+      .hero-buttons {
+        justify-content: center;
+      }
+      
+      .hero-image img { 
+        width: 100%; 
+        max-width: 370px;
+      }
+      
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #e6d1b5;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      }
+      
+      .nav-links.active {
+        display: flex;
+      }
+      
+      .nav-links li {
+        margin: 10px 0;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .nav-actions {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero-text h1 {
+        font-size: 2.5em;
+      }
+      
+      .stat-group {
+        gap: 40px;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .artwork-grid,
+      .artist-grid,
+      .events-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .social-icons {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="main-nav">
+    <div class="logo">Artzone</div>
+    <button class="mobile-menu-btn">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="discover.html">Discover</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="artist.html">Artists</a></li>
+      <li><a href="wastetoart.html">Waste to Art</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="event.html">Events</a></li>
+    </ul>
+    <div class="nav-actions">
+      <input type="text" placeholder="Search artists or artworks..." class="searchbox">
+      <button onclick="window.location.href='cart.html'" class="icon-btn">
+  <i class="fas fa-shopping-cart"></i>
+</button>
+        <button onclick="window.location.href='fav.html'" class="icon-btn">
+  <i class="fas fa-heart"></i>
+</button>
+      <button class="nav-btn Join as artist" onclick="window.location.href='profile.html'">Join as Artist</button>
+      <button class="nav-btn sign-in" onclick="window.location.href='login.html'">Sign In</button>
+
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-artzone">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 class="fade-in text-reveal">TRANSFORM WASTE INTO WONDER</h1>
+          <p class="fade-in delay-1">Discover extraordinary artists who breathe new life into discarded materials, creating stunning artworks that inspire and protect our planet.</p>
+          <div class="search-group fade-in delay-1">
+            <input type="text" placeholder="Search artists or artworks...">
+            <button>Search</button>
+          </div>
+          <div class="hero-buttons fade-in delay-2">
+                  <button class="nav-btn Explore Gallery" onclick="window.location.href='gallery.html'">Explore Gallery</button>
+      <button class="nav-btn Join as Artist" onclick="window.location.href='profile.html'">Join as Artist</button>          </div>
+        </div>
+        <img src="img/glass-craft.png" alt="Recycled art sculpture">
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Eco Stats Section -->
+  <section class="stats-artzone">
+    <div class="container">
+      <div class="stat-group">
+        <div class="stat-card fade-in">
+          <span class="stat-icon">&#9851;</span>
+          <h2>500+</h2>
+          <p>Waste Materials Transformed</p>
+        </div>
+        <div class="stat-card fade-in delay-1">
+          <span class="stat-icon">&#128100;</span>
+          <h2>150+</h2>
+          <p>Eco-Conscious Artists</p>
+        </div>
+        <div class="stat-card fade-in delay-2">
+          <span class="stat-icon">&#127912;</span>
+          <h2>1000+</h2>
+          <p>Unique Artworks Created</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Artworks Gallery -->
+  <section class="featured-artworks">
+    <div class="container">
+      <h2 class="fade-in">Featured Artworks</h2>
+      <p class="fade-in delay-1">Discover extraordinary pieces that showcase the beauty of sustainable art</p>
+      <div class="artwork-grid">
+        <div class="artwork-card fade-in">
+          <span class="art-label">Waste Art</span>
+          <div class="artwork-image">
+            <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ocean Wave Bottle Sculpture">
+          </div>
+          <h3>Ocean Wave Bottle Sculpture</h3>
+          <p>A dynamic sculpture crafted from hundreds of discarded plastic bottles, meticulously cut and shaped to mimic the movement of ocean waves.</p>
+          <div class="artwork-meta">
+            <span class="art-type">Sculpture</span>
+            <span class="art-price">$850</span>
+          </div>
+        </div>
+        <div class="artwork-card fade-in delay-1">
+          <span class="art-label">Waste Art</span>
+          <div class="artwork-image">
+            <img src="https://images.unsplash.com/photo-1516633630673-67bbad747022?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bottle Cap Bloom Wall Art">
+          </div>
+          <h3>Bottle Cap Bloom Wall Art</h3>
+          <p>An intricate floral design meticulously assembled from thousands of colorful plastic bottle caps, creating a vibrant tapestry of upcycled art.</p>
+          <div class="artwork-meta">
+            <span class="art-type">Assemblage</span>
+            <span class="art-price">$480</span>
+          </div>
+        </div>
+        <div class="artwork-card fade-in delay-2">
+          <span class="art-label">Waste Art</span>
+          <div class="artwork-image">
+            <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Geometric Cardboard Stool">
+          </div>
+          <h3>Geometric Cardboard Stool</h3>
+          <p>A surprisingly strong and lightweight stool constructed entirely from layered and compressed recycled cardboard in an elegant geometric pattern.</p>
+          <div class="artwork-meta">
+            <span class="art-type">Furniture</span>
+            <span class="art-price">$210</span>
+          </div>
+        </div>
+      </div>
+      <div class="artwork-grid">
+        <div class="artwork-card fade-in">
+          <span class="art-label">Waste Art</span>
+          <div class="artwork-image">
+            <img src="https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Patchwork Fabric Scrap Tapestry">
+          </div>
+          <h3>Patchwork Fabric Scrap Tapestry</h3>
+          <p>A vibrant textile tapestry composed of various fabric scraps, offcuts, and discarded clothing pieces, woven together into a beautiful narrative.</p>
+          <div class="artwork-meta">
+            <span class="art-type">Textile Art</span>
+            <span class="art-price">$550</span>
+          </div>
+        </div>
+        <div class="artwork-card fade-in delay-1">
+          <span class="art-label">Waste Art</span>
+          <div class="artwork-image">
+            <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Emerald Bottle Chandelier">
+          </div>
+          <h3>Emerald Bottle Chandelier</h3>
+          <p>A stunning chandelier made from dozens of green glass bottles, carefully cut and suspended to create a dazzling play of light and color.</p>
+          <div class="artwork-meta">
+            <span class="art-type">Lighting</span>
+            <span class="art-price">$1200</span>
+          </div>
+        </div>
+        <div class="artwork-card fade-in delay-2">
+          <span class="art-label">Waste Art</span>
+          <div class="artwork-image">
+            <img src="https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Eco Canvas">
+          </div>
+          <h3>Eco Canvas</h3>
+          <p>An abstract painting created using reclaimed canvas and vibrant, recycled acrylic paints, incorporating fabric scraps for texture and depth.</p>
+          <div class="artwork-meta">
+            <span class="art-type">Painting</span>
+            <span class="art-price">$380</span>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-actions">
+              <button class="nav-btn View All Artworks" onclick="window.location.href='gallery.html'">View All Artworks &rarr;</button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Meet Our Artists Section -->
+  <section class="artists-artzone">
+    <div class="container">
+      <h2 class="fade-in">Meet Our Artists</h2>
+      <p class="fade-in delay-1">Connect with talented creators who are making a difference through sustainable art</p>
+      <div class="artist-grid">
+        <div class="artist-card fade-in">
+          <div class="artist-image">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Anya Sharma">
+          </div>
+          <h3>Anya Sharma</h3>
+          <p>Recycled plastic sculptures, upcycled household items, plastic bottle art, environmental installations.</p>
+          <div class="artist-meta">
+            <span>12500 followers</span>
+            <span>★ 4.9</span>
+          </div>
+        </div>
+        <div class="artist-card fade-in delay-1">
+          <div class="artist-image">
+            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ben Carter">
+          </div>
+          <h3>Ben Carter</h3>
+          <p>Textile upcycling, fabric collage, woven art from discarded clothing, sustainable fashion accessories.</p>
+          <div class="artist-meta">
+            <span>8700 followers</span>
+            <span>★ 4.7</span>
+          </div>
+        </div>
+        <div class="artist-card fade-in delay-2">
+          <div class="artist-image">
+            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Clara Rodriguez">
+          </div>
+          <h3>Clara Rodriguez</h3>
+          <p>Metal sculpture, industrial waste art, found object assemblage, public art installations.</p>
+          <div class="artist-meta">
+            <span>15300 followers</span>
+            <span>★ 4.8</span>
+          </div>
+        </div>
+        <div class="artist-card fade-in delay-3">
+          <div class="artist-image">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="David Lee">
+          </div>
+          <h3>David Lee</h3>
+          <p>Paper art, cardboard sculpture, recycled paper collage, book art, mixed media.</p>
+          <div class="artist-meta">
+            <span>6200 followers</span>
+            <span>★ 4.6</span>
+          </div>
+        </div>
+      </div>
+      <div>
+     <button class="nav-btn Discover All Artworks" onclick="window.location.href='artist.html'">Discover All Artists &rarr;</button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Events Section -->
+  <section class="upcoming-events">
+    <div class="container">
+      <h2 class="fade-in">Upcoming Events</h2>
+      <p class="fade-in delay-1">Join workshops, exhibitions, and community events celebrating sustainable art</p>
+      <div class="events-grid">
+        <div class="event-card fade-in">
+          <div class="event-img-box">
+            <img src="https://images.unsplash.com/photo-1549056572-75914d6d7e1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Upcycled Sculpture Workshop">
+            <span class="event-date">10/2</span>
+          </div>
+          <div class="event-content">
+            <h3>Upcycled Sculpture Workshop</h3>
+            <p>Join us for a hands-on workshop where you'll learn to transform everyday waste materials into stunning art.<br>
+              <b>Artzone Community Studio</b>, 123 Green St, Eco City</p>
+          </div>
+        </div>
+        <div class="event-card fade-in delay-1">
+          <div class="event-img-box">
+            <img src="https://images.unsplash.com/photo-1515168833906-d2a3b82b3029?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Eco-Art Exhibition">
+            <span class="event-date">11/14/2024</span>
+          </div>
+          <div class="event-content">
+            <h3>Eco-Art Exhibition: Reimagined Realities</h3>
+            <p>Discover a captivating collection of artworks created entirely from recycled and reclaimed materials.<br>
+              <b>The Gallery at Artzone</b>, 456 Nature Ave, Eco City</p>
+          </div>
+        </div>
+        <div class="event-card fade-in delay-2">
+          <div class="event-img-box">
+            <img src="https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Waste-to-Wear Fashion Show">
+            <span class="event-date">12/6/2024</span>
+          </div>
+          <div class="event-content">
+            <h3>Waste-to-Wear Fashion Show</h3>
+            <p>Witness the innovative fusion of fashion and sustainability in our annual Waste-to-Wear Fashion Show.<br>
+              <b>Virtual Event</b> (Zoom Link Provided)</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button class="nav-btn View All Events" onclick="window.location.href='event.html'">View All Events &rarr;</button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>Artzone</h4>
+          <p>Transforming waste into wonder. Connect with eco-conscious artists who create beautiful art from discarded materials.</p>
+          <p>&#9851; Eco-Friendly Art Platform</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-pinterest"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <p>Art Gallery<br>Featured Artists<br>Waste to Art<br>Blog & Stories</p>
+        </div>
+        <div>
+          <h4>Community</h4>
+          <p>Events & Workshops<br>Join as Artist<br>&#128100; Growing Community</p>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <p>hello@artzone.eco<br>Made with love for our planet</p>
+          <p>Subscribe to our newsletter:</p>
+          <div class="search-group">
+            <input type="email" placeholder="Your email address">
+            <button>Subscribe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2025 Artzone. Transforming waste into art, one creation at a time.
+    </div>
+  </footer>
+  <script>
+    // Reveal fade-in elements when scrolling
+    document.addEventListener('DOMContentLoaded', function() {
+      const observers = document.querySelectorAll('.fade-in, .fade-in.delay-1, .fade-in.delay-2, .fade-in.delay-3');
+      
+      observers.forEach(el => {
+        function revealOnScroll() {
+          if (el.getBoundingClientRect().top < window.innerHeight * 0.85) {
+            el.style.opacity = 1;
+            el.style.transform = 'translateY(0)';
+          }
+        }
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+      });
+      
+      // Mobile menu toggle
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      const navLinks = document.querySelector('.nav-links');
+      
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+          navLinks.classList.toggle('active');
+          this.querySelector('i').classList.toggle('fa-bars');
+          this.querySelector('i').classList.toggle('fa-times');
+        });
+      }
+      
+      // Text reveal animation
+      const textReveal = document.querySelector('.text-reveal');
+      if (textReveal) {
+        setTimeout(() => {
+          textReveal.style.opacity = 1;
+        }, 500);
+      }
+    });
+  </script>
+</body>
+</html>
