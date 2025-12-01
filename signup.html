@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Artzone | Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Reuse your login.css -->
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="/" class="navbar-logo">
+      <i class="fas fa-palette"></i>
+      <span>Artzone</span>
+    </a>
+
+    <div class="navbar-menu">
+      <a href="discover.html">Discover</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="artist.html">Artists</a>
+      <a href="wastetoart.html">Waste to Art</a>
+      <a href="blog.html">Blog</a>
+      <a href="event.html">Events</a>
+    </div>
+
+    <div class="navbar-actions">
+      <a href="artist_signup.html"><button class="navbar-btn">Join as Artist</button></a>
+      <a href="login.html"><button class="navbar-btn signin">Sign In</button></a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main-container">
+    <div class="login-card">
+
+      <!-- Icon -->
+      <svg class="user-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 60 60">
+        <circle cx="30" cy="22" r="12" stroke="#473920" stroke-width="3"></circle>
+        <path d="M12 50c0-7.5 11-11.5 18-11.5s18 4 18 11.5" 
+              stroke="#473920" stroke-width="3" fill="none"></path>
+      </svg>
+
+      <!-- Title -->
+      <div class="login-title">Create an Account</div>
+      <div class="login-desc">Join Artzone and showcase your sustainable creations.</div>
+
+      <!-- Message Box -->
+      <div id="messageArea" class="message"></div>
+
+      <!-- Social Signup -->
+      <div class="social-login-group">
+        <button class="social-btn" id="googleSignup">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" width="20">
+          Sign Up with Google
+        </button>
+
+        <button class="social-btn facebook" id="facebookSignup">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" width="18">
+          Sign Up with Facebook
+        </button>
+      </div>
+
+      <div class="divider"><span>or</span></div>
+
+      <!-- FORM -->
+      <form id="signupForm" class="email-login-form">
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="fullName" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="password-container">
+            <input type="password" id="password" placeholder="Create a password" required minlength="6">
+            <button type="button" class="toggle-password" data-target="password">
+              <i class="far fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <div class="password-container">
+            <input type="password" id="confirmPassword" placeholder="Repeat password" required minlength="6">
+            <button type="button" class="toggle-password" data-target="confirmPassword">
+              <i class="far fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button class="login-btn" type="submit">Create Account</button>
+      </form>
+
+      <div class="extra-links">
+        Already have an account? <a href="login.html">Sign In</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>&copy; 2023 Artzone. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact</a>
+      <a href="#">About</a>
+    </div>
+  </footer>
+
+  <script src="/js/signup.js"></script>
+
+</body>
+</html>
